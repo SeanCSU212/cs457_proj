@@ -4,7 +4,9 @@
 3 Player Tic-Tac-Toe
 
 ## Team:
-Jared Traub, Sean Cobb, Seth Harling
+  * Jared Traub
+  * Sean Cobb
+  * Seth Harling
 
 ## Project Objective:
   Within this project our team is going to build a terminal based 3 player tic-tac-toe style game, incorporating the use of sockets to allow for 
