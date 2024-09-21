@@ -12,3 +12,5 @@ This is a 3 player Tic-Tac-Toe game implemented using Python and sockets. It inv
 
 ## Additional resources
 * For more information and strategies on playing the game visit this link: [3 Player Tic-Tac-Toe](https://tictactoefree.com/tips/3-player-tic-tac-toe)
+* [Python Documentation](https://docs.python.org/3/)
+* [Sockets Tutorial]
