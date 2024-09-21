@@ -1,4 +1,6 @@
-# Project Title:
+# SOW
+
+## Project Title:
 3 Player Tic-Tac-Toe
 
 ## Team:
