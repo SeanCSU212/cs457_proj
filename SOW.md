@@ -29,7 +29,11 @@ cross-network multiplayer interaction.
 
 ## Timeline:
 ### Key Milestones:
-[Outline the major milestones or checkpoints throughout the project, with estimated completion dates.]
+ * Sprint 1 Complete: TCP Server/Client Implementation - 10/6
+ * Sprint 2 Complete: Message Protocol Implementation - 10/20
+ * Sprint 3 Complete: Multi-Player Functionality - 11/3
+ * Sprint 4 Complete: Gameplay and UI - 11/17
+ * Sprint 5 Complete: Error Handling/Testing - 12/6
 ### Task Breakdown:
 [Create a detailed breakdown of tasks, assigning estimated hours or days to each.]
 
