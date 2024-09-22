@@ -3,21 +3,26 @@
 ## Project Title:
 3 Player Tic-Tac-Toe
 
-## Team:
+## Team: Bandwidth and Boujee
   * Jared Traub
   * Sean Cobb
   * Seth Harling
+
 
 ## Project Objective:
   Within this project our team is going to build a terminal based 3 player tic-tac-toe style game, incorporating the use of sockets to allow for 
 cross-network multiplayer interaction. 
 
-## Scope:
 
+## Scope:
 ### Inclusions:
 [List the specific tasks, features, or components that will be included in the project.]
+  * Multiplayer usability
+  * Turn based gameplay
+  * Clear terminal-based messages outlining rules and in-game developments
+
 ### Exclusions:
-[List any tasks, features, or components that will not be included in the project.]
+  - Symbol customization
 ### Deliverables:
 [List the expected outputs or deliverables from the project, such as a working Python script, documentation, or presentations.]
 
@@ -28,16 +33,124 @@ cross-network multiplayer interaction.
 ### Task Breakdown:
 [Create a detailed breakdown of tasks, assigning estimated hours or days to each.]
 
+
 ## Technical Requirements:
 ### Hardware:
-[Specify any hardware requirements, such as servers, networking equipment, or specific devices.]
+  * 1 Host Server: -h (help show the user how to run the server), -i-host-ip, -p port
+  * 3 Client Servers: -h (help show the player how to connect, and play), -i (ip address of the server), -p (listening port of the server), -n (DNS name of the server) 
+  * Network Connected Device/s
 ### Software:
-[List the necessary software tools, programming languages (Python), libraries (socket, threading, etc.), and operating systems.]
+  * Git
+  * IDE (preferably VSCode)
+#### Tools:
+  * SSH (if required)
+  * Git
+  * IDE (preferably VSCode)
+  * Terminal
+#### Programming Languages:
+  * Python
+#### Libraries:
+  * socket
+#### Operating System (OS):
+  * Linux
+
+
 ## Assumptions:
-[State any assumptions that are being made about the project, such as network connectivity or availability of resources.]
+  * Network connectivity
+  * Socket availability
+
+
 ## Roles and Responsibilities:
-[Define the roles of team members, including project manager, developers, testers, etc., and their responsibilities.]
+### Project Manager:
+  * **Jared Traub**
+#### Responsibilities:
+##### Planning and Coordination
+  * Create project plan
+  * Outline milestones
+  * Manage timelines and deliverables
+  * Coordinate meetings
+##### Leadership and Communication
+  * Ensure clear understanding of member responsibilities
+  * Maintain project timeline
+  * Motivate team members
+##### Quality Control
+  * Ensure project meets requirements
+  * Maintain functionality
+  * Ensure ease of use
+##### Testing Oversight
+  * Oversee all testing
+
+### Developers:
+  * **Seth Harling**
+  * **Sean Cobb**
+#### Responsibilities:
+##### Design and Architecture
+  * Maintain and ensure server-client architecture
+  * Ensure fair gameplay
+  * Ensure adherence to the rule
+  * Use modular code design principals
+  * Ensure readability
+##### Network Functionality
+  * Ensure player connection, disconnect, and reconnect handling
+  * Ensure reliable protocols
+  * Ensure consistency
+##### User Interface (UI)
+  * Clear and intuitive text-based UI
+  * Ensure ease of interaction
+  * Ensure responsive UI
+##### Logic
+  * Implement turn based game
+  * Ensure system properly handles three different turns
+  * Correctly identify and communicate winning conditions
+  * Prevent illegal moves/actions 
+##### Documentation
+  * Create clear documentation of code
+  * Provide installation, setup, and closing of game and other resources
+  * Documentation of all development processes
+  * All changes are reviewed and approved by someone else before being merged
+##### Collaboration
+  * Ensure clear communication with project manager
+  * Ensure clear communication among developers
+  * Ensure similar-identical, professional programming practices and technique
+
+### Testers:
+  * **Jared Traub**
+  * **Seth Harling**
+  * **Sean Cobb**
+#### Responsibilities:
+##### Test Planning and Strategy
+  * Develop comprehensive test plan and strategy
+  * Outline objectives
+  * Identify edge cases
+  * Ensure full test coverage
+##### Functional Testing
+  * Tests that verify functionality of game-based aspects
+##### Network Testing
+  * Tests that verify network functionality
+  * Tests to ensure multiplayer usability and capability
+##### Integration Testing
+  * Tests that ensure all aspects of the game work in a cohesive manner
+##### Performance Testing
+  * Conduct stress tests
+  * Tests for efficiency
+##### User Experience Testing
+  * Tests of UI
+  * Tests for user satisfaction
+  * Tests for ease of use
+  * Tests for message comprehension
+##### Bug Identification and Reporting
+  * Identify and mark any and all bugs that show up in Git repository
+  * Tests for core game feature
+  * Ensure full functionality
+##### Documentation
+  * Maintain testing documentation in code and output
+
+
 ## Communication Plan:
-[Outline the communication channels and frequency for project updates, meetings, and decision-making.]
+  * All project based message should be sent through either group text messaging or Microsoft Teams
+  * Weekly team scrums
+  * Weekly project update message
+  * All group-based decisions are to be made by the collective of the whole team
+
+
 ## Additional Notes:
-[Include any other relevant information or considerations that are specific to your project.]
