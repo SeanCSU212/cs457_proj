@@ -24,7 +24,9 @@ cross-network multiplayer interaction.
 ### Exclusions:
   - Symbol customization
 ### Deliverables:
-[List the expected outputs or deliverables from the project, such as a working Python script, documentation, or presentations.]
+ * Working Python Client Script
+ * Working Python Server Script
+ * Documentation
 
 
 ## Timeline:
