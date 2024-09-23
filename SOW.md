@@ -44,7 +44,12 @@ cross-network multiplayer interaction.
  5. Implement Server-Side Message Handling - 1 Hour
  6. Implement Client-Side Message Handling - 1 Hour
  7. Implement Connection Management - 1 Hour
- 8. 
+ 8. Implement Multiplayer Server - 1 Hour
+ 9. Implement Multiplayer client connection - 1 Hour
+ 10. Implement UI features - 2 Hours
+ 11. Implement Gameplay functionality - 3 Hours
+ 12. Implement Error handling - 2 Hours
+ 13. Testing - 2 Hours
 
 
 ## Technical Requirements:
