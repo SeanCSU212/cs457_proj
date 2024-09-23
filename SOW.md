@@ -37,7 +37,14 @@ cross-network multiplayer interaction.
  * Sprint 4 Complete: Gameplay and UI - 11/17
  * Sprint 5 Complete: Error Handling/Testing - 12/6
 ### Task Breakdown:
-[Create a detailed breakdown of tasks, assigning estimated hours or days to each.]
+ 1. Create Server.py file - <1 Hour
+ 2. Create Client.py file - <1 Hour
+ 3. Implement basic server logic in Server.py - 1 Hour
+ 4. Implement basic client logic in Server.py - 1 Hour
+ 5. Implement Server-Side Message Handling - 1 Hour
+ 6. Implement Client-Side Message Handling - 1 Hour
+ 7. Implement Connection Management - 1 Hour
+ 8. 
 
 
 ## Technical Requirements:
