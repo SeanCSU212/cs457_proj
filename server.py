@@ -1,9 +1,9 @@
 import socket
 import selectors
 import types
+import json
 
 sel = selectors.DefaultSelector()
-
 CONNECTION_TIMEOUT = 60.0
 
 def accept_wrapper(sock):
@@ -27,8 +27,14 @@ def service_connection(key, mask):
         try:
             recv_data = sock.recv(1024)
             if recv_data:
-                print(f"Received message from {data.addr}: {recv_data.decode('utf-8')}")
-                data.outb += recv_data
+                message = recv_data.decode('utf-8')
+                print(f"Received message from {data.addr}: ")
+                
+                try:
+                    json_message = json.loads(message)
+                    deserialize(sock, json_message, data)
+                except json.JSONDecodeError:
+                    print("ERROR: Received invalid json")
             else:
                 print(f"Closing connection")
                 sel.unregister(sock)
@@ -36,7 +42,7 @@ def service_connection(key, mask):
         except socket.timeout:
             print(f"Connection timed out after {CONNECTION_TIMEOUT} seconds")
         except socket.error as e:
-            print(f"Socket error while receiving communication: {e}")
+            print(f"SOCKET ERROR IN COMMUNICATION: {e}")
 
     if mask & selectors.EVENT_WRITE:
         if data.outb:
@@ -47,11 +53,37 @@ def service_connection(key, mask):
             except socket.timeout:
                 print(f"Connection timed out after {CONNECTION_TIMEOUT} seconds")
             except socket.error as e:
-                print(f"Socket error while sending communication: {e}")
+                print(f"SOCKET ERROR IN COMMUNICATION: {e}")
 
-host = '0.0.0.0'
-port = 12358
+#For handling deserialized messages
+def deserialize(sock, message, data):
+    type = message["type"]
+    username = message["username"]
     
+    if type == "join":
+        join_deserial(sock, message)
+    elif type == "quit":
+        quit_deserial(sock, message)
+
+#Deserialize messages by type
+def join_deserial(sock, message):
+    username = message["username"]
+    response = {
+        "type": "join_ack",
+        "username": message["username"],
+        "data": {
+            "message": f"Welcome to the game {username}!"
+        }
+    }
+    sock.send(json.dumps(response).encode('utf-8'))
+
+def quit_deserial(sock, message):
+    username = message["username"]
+    sel.unregister(sock)
+    sock.close()
+    
+host = '0.0.0.0'
+port = 12359
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 lsock.bind((host, port))
 lsock.listen()
