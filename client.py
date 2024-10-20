@@ -1,101 +1,65 @@
 import socket
-import sys
 import json
+import threading
 
-def start_client(server_ip='0.0.0.0', server_port=12359):
+# Client configuration
+host = '127.0.0.1'
+port = 12358
+
+def send_message(sock, msg_type, msg_data):
+    message = json.dumps({"type": msg_type, "data": msg_data})
+    sock.sendall(message.encode())
+
+def handle_server_response(sock):
+    while True:
+        try:
+            data = sock.recv(1024)
+            if data:
+                message = json.loads(data.decode())
+                process_message(message)
+            else:
+                print("Server closed the connection")
+                break
+        except (ConnectionResetError, json.JSONDecodeError):
+            print("Error receiving or parsing server response")
+            break
+
+def process_message(message):
+    msg_type = message["type"]
+    if msg_type == "join_broadcast":
+        handle_join_broadcast(message["data"])
+    elif msg_type == "chat_broadcast":
+        handle_chat_broadcast(message["data"])
+    elif msg_type == "quit_broadcast":
+        handle_quit_broadcast(message["data"])
+
+def handle_join_broadcast(data):
+    print(f"Player {data['username']} with ID {data['player_id']} has joined the game.")
+
+
+def handle_chat_broadcast(data):
+    print(f"Chat from {data['sender_id']}: {data['message']}")
+
+def handle_quit_broadcast(data):
+    print(f"Player {data['player_id']} has quit the game.")
+
+def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        try:
-            sock.connect((server_ip, server_port))
-            print(f"Connected to server at {server_ip}:{server_port}")
-        except ConnectionRefusedError:
-            print("Error: connection refused")
-            sys.exit(1)
-
-        username = input("Enter username: ")
-        send_join(sock, username)
-
-        try:
-            while True:
-                action_type = input("Enter action (chat/quit): ").strip().lower()
-
-                if action_type == 'quit':
-                    send_quit(sock, username)
-                    break
-
-                elif action_type == 'chat':
-                    message = get_message()
-                    send_chat(sock, username, message)
-                
-                data = sock.recv(1024)
-                if not data:
-                    print("Disconnected from server.")
-                    break
-
-                process_server_message(data.decode('utf-8'))
-
-        except KeyboardInterrupt:
-            print("Client is disconnecting...")
-        except socket.error as e:
-            print(f"Socket error: {e}")
-        finally:
-            print("Client disconnected")
-
-
-def send_join(sock, username):
-    """Send a join request to the server."""
-    message = {
-        "type": "join",
-        "username": username
-    }
-    sock.send(json.dumps(message).encode('utf-8'))
-
-
-def send_chat(sock, username, message):
-    """Send a chat message to the server."""
-    message = {
-        "type": "chat",
-        "username": username,
-        "message": message
-    }
-    sock.send(json.dumps(message).encode('utf-8'))
-
-
-def send_quit(sock, username):
-    """Send a quit request to the server."""
-    message = {
-        "type": "quit",
-        "username": username
-    }
-    sock.send(json.dumps(message).encode('utf-8'))
-
-
-def get_message():
-    """Get chat message from user."""
-    return input("Enter message: ")
-
-
-def process_server_message(data):
-    """Process messages received from the server."""
-    try:
-        json_data = json.loads(data)
-        msg_type = json_data.get("type")
-
-        if msg_type == "join_ack":
-            print(f"Server: {json_data['data']['message']}")
-
-        elif msg_type == "chat_broadcast":
-            sender = json_data['data']['sender']
-            message = json_data['data']['message']
-            print(f"{sender}: {message}")
-
-        else:
-            print(f"Unknown message type: {msg_type}")
-
-    except json.JSONDecodeError:
-        print("Error: Received invalid JSON from server.")
-    except KeyError:
-        print("Error: Missing fields in server response.")
-
+        sock.connect((host, port))
+        
+        threading.Thread(target=handle_server_response, args=(sock,)).start()
+        
+        while True:
+            command = input("Enter command (join/move/chat/quit): ").strip()
+            if command == "join":
+                username = input("Enter your username: ").strip()
+                send_message(sock, "join", {"username": username})
+            elif command == "chat":
+                message = input("Enter chat message: ").strip()
+                send_message(sock, "chat", {"message": message})
+            elif command == "quit":
+                send_message(sock, "quit", {})
+                break
 
 if __name__ == "__main__":
-    start_client()
+    main()
