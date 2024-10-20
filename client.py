@@ -1,7 +1,10 @@
 import socket
 import sys
+import json
 
-def start_client(server_ip='0.0.0.0', server_port=12358):
+username = ''
+
+def start_client(server_ip='0.0.0.0', server_port=12359):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         try:
             sock.connect((server_ip, server_port))
@@ -10,12 +13,15 @@ def start_client(server_ip='0.0.0.0', server_port=12358):
             print("Error: connection refused")
             sys.exit(1)
 
+        username = input("Enter username: ")
+        send_join(sock, username)
+
         try:
             while True:
-                message = input("Enter message to send: ")
-                if message.lower() == 'exit':
+                action_type = input("Enter action (quit): ")
+                if action_type == 'quit':
+                    send_quit(sock, username)
                     break
-                sock.sendall(message.encode('utf-8'))
                 data = sock.recv(1024)
                 print(f"Received from server: {data.decode('utf-8')}")
 
@@ -26,5 +32,20 @@ def start_client(server_ip='0.0.0.0', server_port=12358):
         finally:
             print("Client disconnected")
 
+#For sending json messages
+def send_join(sock, username):
+    message = {
+        "type": "join",
+        "username": username
+    }
+    sock.send(json.dumps(message).encode('utf-8'))
+
+def send_quit(sock, username):
+    message = {
+        "type": "quit",
+        "username": username
+    }
+    sock.send(json.dumps(message).encode('utf-8'))
+    
 if __name__ == "__main__":
     start_client()
