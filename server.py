@@ -77,9 +77,10 @@ def join_deserial(sock, data, msg_data):
     broadcast_message("join_broadcast", {"username": username, "player": data.player})
 
 def chat_deserial(sock, data, msg_data):
+    username = msg_data["username"]
     message = msg_data["message"]
     sender_id = data.player
-    print(f"Chat message from {sender_id}: {message}")
+    print(f"Chat message from {username} playing as {sender_id}: {message}")
     broadcast_message("chat_broadcast", {
         "sender_id": sender_id,
         "message": message
