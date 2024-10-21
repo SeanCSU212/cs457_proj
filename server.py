@@ -9,6 +9,9 @@ clients = {}
 
 CONNECTION_TIMEOUT = 60.0
 
+game_board = [["","","",""],["","","",""],["","","",""],["","","",""]]
+
+
 def accept_wrapper(sock):
     try:
         conn, addr = sock.accept()
