@@ -14,7 +14,7 @@ def accept_wrapper(sock):
         conn, addr = sock.accept()
         print(f"Accepted connection from {addr}")
         conn.setblocking(False)
-        data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"", player_id=None, username=None)
+        data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"", player=None, username=None)
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
         sel.register(conn, events, data=data)
     except socket.timeout:
@@ -66,14 +66,22 @@ def join_deserial(sock, data, msg_data):
     username = msg_data["username"]
     data.username = username
     clients[sock] = data
+
+    if (len(clients) > 3):
+        print("Sorry, 3 players already joined! Stay connected to spectate and/or chat")
+        data.player = "Spectator"
+
+
+        print(f"{username} joined the game with as {data.player} ")
+        broadcast_message("join_broadcast", {"username": username, "player": data.player})
+        return
+
     players = ['X', 'O', '+']
     data.player = players[len(clients) - 1] 
     
-    if (len(clients) >= 3):
-        print("Sorry, 3 players already joined! Stay connected to spectate and/or chat")
+    
 
     print(f"{username} joined the game with piece {data.player} ")
-
     broadcast_message("join_broadcast", {"username": username, "player": data.player})
 
 def chat_deserial(sock, data, msg_data):
