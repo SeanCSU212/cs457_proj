@@ -9,6 +9,9 @@ clients = {}
 
 CONNECTION_TIMEOUT = 60.0
 
+game_board = [["","","",""],["","","",""],["","","",""],["","","",""]]
+
+
 def accept_wrapper(sock):
     try:
         conn, addr = sock.accept()
@@ -86,9 +89,9 @@ def chat_deserial(sock, data, msg_data):
     })
 
 def quit_deserial(sock, data):
-    player_id = data.player_id
-    broadcast_message("quit_broadcast", {"player_id": player_id})
-    print(f"Player {player_id} quit the game")
+    username = data.username
+    broadcast_message("quit_broadcast", {"username": username})
+    print(f"Player {username} quit the game")
     if sock in clients:
         del clients[sock]
 
