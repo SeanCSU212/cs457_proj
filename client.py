@@ -53,8 +53,9 @@ def main():
                 username = input("Enter your username: ").strip()
                 send_message(sock, "join", {"username": username})
             elif command == "chat":
+                username = input("Enter your username: ").strip()
                 message = input("Enter chat message: ").strip()
-                send_message(sock, "chat", {"message": message})
+                send_message(sock, "chat", {"message": message, "username": username})
             elif command == "quit":
                 send_message(sock, "quit", {})
                 break
