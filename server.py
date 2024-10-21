@@ -14,7 +14,7 @@ def accept_wrapper(sock):
         conn, addr = sock.accept()
         print(f"Accepted connection from {addr}")
         conn.setblocking(False)
-        data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"", player_id=None, username=None)
+        data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"", player=None, username=None)
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
         sel.register(conn, events, data=data)
     except socket.timeout:

@@ -2,7 +2,6 @@ import socket
 import json
 import threading
 
-# Client configuration
 host = '127.0.0.1'
 port = 12358
 
@@ -35,7 +34,6 @@ def process_message(message):
 
 def handle_join_broadcast(data):
     print(f"Player {data['username']} with piece {data['player']} has joined the game.")
-
 
 def handle_chat_broadcast(data):
     print(f"Chat from {data['sender_id']}: {data['message']}")
