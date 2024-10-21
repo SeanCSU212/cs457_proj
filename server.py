@@ -7,8 +7,6 @@ sel = selectors.DefaultSelector()
 
 clients = {}
 
-game_board = [["", "", "", ""], ["", "", "", ""], ["", "", "", ""], ["", "", "", ""]]
-
 CONNECTION_TIMEOUT = 60.0
 
 def accept_wrapper(sock):
@@ -56,7 +54,7 @@ def handle_message(sock, data, message):
         msg = json.loads(message)
         msg_type = msg["type"]
         if msg_type == "join":
-            handle_join(sock, data, msg["data"])
+            join_deserial(sock, data, msg["data"])
         elif msg_type == "chat":
             handle_chat(sock, data, msg["data"])
         elif msg_type == "quit":
@@ -64,14 +62,19 @@ def handle_message(sock, data, message):
     except json.JSONDecodeError:
         print("Received invalid JSON message")
 
-def handle_join(sock, data, msg_data):
+def join_deserial(sock, data, msg_data):
     username = msg_data["username"]
     data.username = username
-    data.player_id = str(hash(sock)) 
     clients[sock] = data
-    print(f"{username} joined the game with player_id {data.player_id}")
+    players = ['X', 'O', '+']
+    data.player = players[len(clients) - 1] 
+    
+    if (len(clients) >= 3):
+        print("Sorry, 3 players already joined! Stay connected to spectate and/or chat")
 
-    broadcast_message("join_broadcast", {"username": username, "player_id": data.player_id})
+    print(f"{username} joined the game with piece {data.player} ")
+
+    broadcast_message("join_broadcast", {"username": username, "player": data.player})
 
 def handle_chat(sock, data, msg_data):
     message = msg_data["message"]

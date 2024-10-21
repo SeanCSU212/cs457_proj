@@ -34,14 +34,14 @@ def process_message(message):
         handle_quit_broadcast(message["data"])
 
 def handle_join_broadcast(data):
-    print(f"Player {data['username']} with ID {data['player_id']} has joined the game.")
+    print(f"Player {data['username']} with piece {data['player']} has joined the game.")
 
 
 def handle_chat_broadcast(data):
     print(f"Chat from {data['sender_id']}: {data['message']}")
 
 def handle_quit_broadcast(data):
-    print(f"Player {data['player_id']} has quit the game.")
+    print(f"Player {data['player']} has quit the game.")
 
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -50,7 +50,7 @@ def main():
         threading.Thread(target=handle_server_response, args=(sock,)).start()
         
         while True:
-            command = input("Enter command (join/move/chat/quit): ").strip()
+            command = input("Enter command (join/chat/quit): ").strip()
             if command == "join":
                 username = input("Enter your username: ").strip()
                 send_message(sock, "join", {"username": username})
