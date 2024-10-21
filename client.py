@@ -9,7 +9,7 @@ def send_message(sock, msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data})
     sock.sendall(message.encode())
 
-def receive_response(sock):
+def handle_server_response(sock):
     try:
         data = sock.recv(1024)
         if data:
