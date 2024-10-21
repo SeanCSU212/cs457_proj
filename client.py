@@ -58,7 +58,7 @@ def main():
                 break
 
             # Wait for and handle server response synchronously
-            if not receive_response(sock):
+            if not handle_server_response(sock):
                 break
 
 if __name__ == "__main__":
