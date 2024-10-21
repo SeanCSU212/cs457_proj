@@ -38,7 +38,7 @@ def handle_join_broadcast(data):
 
 
 def handle_chat_broadcast(data):
-    print(f"Chat from {data['sender_id']}: {data['message']}")
+    print(f"Chat from {data['sender']}: {data['message']}")
 
 def handle_quit_broadcast(data):
     print(f"Player {data['player']} has quit the game.")
@@ -50,12 +50,12 @@ def main():
         threading.Thread(target=handle_server_response, args=(sock,)).start()
         
         while True:
-            command = input("Enter command (join/chat/quit): ").strip()
+            command = input("\nEnter command (join/chat/quit): ").strip()
             if command == "join":
-                username = input("Enter your username: ").strip()
+                username = input("\nEnter your username: ").strip()
                 send_message(sock, "join", {"username": username})
             elif command == "chat":
-                message = input("Enter chat message: ").strip()
+                message = input("\nEnter message: ").strip()
                 send_message(sock, "chat", {"message": message})
             elif command == "quit":
                 send_message(sock, "quit", {})

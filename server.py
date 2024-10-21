@@ -78,17 +78,17 @@ def join_deserial(sock, data, msg_data):
 
 def chat_deserial(sock, data, msg_data):
     message = msg_data["message"]
-    sender_id = data.player
-    print(f"Chat message from {sender_id}: {message}")
+    sender = data.username
+    print(f"Chat message from {sender}: {message}")
     broadcast_message("chat_broadcast", {
-        "sender_id": sender_id,
+        "sender": sender,
         "message": message
     })
 
 def quit_deserial(sock, data):
-    player_id = data.player_id
-    broadcast_message("quit_broadcast", {"player_id": player_id})
-    print(f"Player {player_id} quit the game")
+    player = data.username
+    broadcast_message("quit_broadcast", {"player": player})
+    print(f"Player {player} quit the game")
     if sock in clients:
         del clients[sock]
 
