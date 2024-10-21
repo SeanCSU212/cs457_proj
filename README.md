@@ -9,7 +9,10 @@ This is a 3 player Tic-Tac-Toe game implemented using Python and sockets. It inv
 ## Game Message Protocol
 * 'join' - Follows up by prompting user for Username, and assigns a playing piece (X,O,+). Command to join game, allows up to 3 player to activly play, and remaining clients to join as spectators. Sends broadcast that new player joined to server and all connected clients.
 * 'chat' - Follows up by promting user for message, broadcasts message back to server and to all connected clients.
-* 'quit' - Allows client to disconnect, sends broadcast to server and all connected clients. 
+* 'quit' - Allows client to disconnect, sends broadcast to server and all connected clients.
+* 'move' - Follows up by prompting user for coordinate to play (ex: 'A3'). The server then validates that no one has already played in that move, and if it is a valid move, places piece on game board. Server then handles game logic based on this move request.
+
+
 ## Technologies used
 * Python
 * Sockets
