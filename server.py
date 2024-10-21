@@ -56,9 +56,9 @@ def handle_message(sock, data, message):
         if msg_type == "join":
             join_deserial(sock, data, msg["data"])
         elif msg_type == "chat":
-            handle_chat(sock, data, msg["data"])
+            chat_deserial(sock, data, msg["data"])
         elif msg_type == "quit":
-            handle_quit(sock, data)
+            quit_deserial(sock, data)
     except json.JSONDecodeError:
         print("Received invalid JSON message")
 
@@ -76,16 +76,16 @@ def join_deserial(sock, data, msg_data):
 
     broadcast_message("join_broadcast", {"username": username, "player": data.player})
 
-def handle_chat(sock, data, msg_data):
+def chat_deserial(sock, data, msg_data):
     message = msg_data["message"]
-    sender_id = data.player_id
+    sender_id = data.player
     print(f"Chat message from {sender_id}: {message}")
     broadcast_message("chat_broadcast", {
         "sender_id": sender_id,
         "message": message
     })
 
-def handle_quit(sock, data):
+def quit_deserial(sock, data):
     player_id = data.player_id
     broadcast_message("quit_broadcast", {"player_id": player_id})
     print(f"Player {player_id} quit the game")
