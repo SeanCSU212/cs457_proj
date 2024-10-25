@@ -2,15 +2,38 @@ import socket
 import selectors
 import types
 import json
+import argparse
+import sys
+
+import serverlib
+
+
+
 
 sel = selectors.DefaultSelector()
+parser = argparse.ArgumentParser(description = "Welcome to the Tic-Tac-Toe-Two Server! \nUSAGE: python3 server.py <Server IP> <port>")
 
-clients = {}
+parser.add_argument('-i', '--ipaddress', type=str, required=True, help='Host IP Address')
+parser.add_argument('-p', '--port', type=str, required=True, help='Port Number')
 
-CONNECTION_TIMEOUT = 60.0
+args = parser.parse_args()
 
-game_board = [["","","",""],["","","",""],["","","",""],["","","",""]]
 
+host = args.ipaddress
+port = int(args.port)
+
+def handle_message(sock, data, message):
+    try:
+        msg = json.loads(message)
+        msg_type = msg["type"]
+        if msg_type == "join":
+            serverlib.join_deserial(sock, data, msg["data"])
+        elif msg_type == "chat":
+            serverlib.chat_deserial(sock, data, msg["data"])
+        elif msg_type == "quit":
+            serverlib.quit_deserial(sock, data)
+    except json.JSONDecodeError:
+        print("Received invalid JSON message")
 
 def accept_wrapper(sock):
     try:
@@ -52,57 +75,9 @@ def service_connection(key, mask):
             except socket.error as e:
                 print(f"Socket error while sending communication: {e}")
 
-def handle_message(sock, data, message):
-    try:
-        msg = json.loads(message)
-        msg_type = msg["type"]
-        if msg_type == "join":
-            join_deserial(sock, data, msg["data"])
-        elif msg_type == "chat":
-            chat_deserial(sock, data, msg["data"])
-        elif msg_type == "quit":
-            quit_deserial(sock, data)
-    except json.JSONDecodeError:
-        print("Received invalid JSON message")
-
-def join_deserial(sock, data, msg_data):
-    username = msg_data["username"]
-    data.username = username
-    clients[sock] = data
-    players = ['X', 'O', '+']
-    data.player = players[len(clients) - 1] 
-    
-    if (len(clients) >= 3):
-        print("Sorry, 3 players already joined! Stay connected to spectate and/or chat")
-
-    print(f"{username} joined the game with piece {data.player} ")
-
-    broadcast_message("join_broadcast", {"username": username, "player": data.player})
-
-def chat_deserial(sock, data, msg_data):
-    message = msg_data["message"]
-    sender_id = data.player
-    print(f"Chat message from {sender_id}: {message}")
-    broadcast_message("chat_broadcast", {
-        "sender_id": sender_id,
-        "message": message
-    })
-
-def quit_deserial(sock, data):
-    username = data.username
-    broadcast_message("quit_broadcast", {"username": username})
-    print(f"Player {username} quit the game")
-    if sock in clients:
-        del clients[sock]
-
-def broadcast_message(msg_type, msg_data):
-    message = json.dumps({"type": msg_type, "data": msg_data})
-    for client_socket in clients:
-        client_socket.send(message.encode())
 
 
-host = '0.0.0.0'
-port = 12358
+
 
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 lsock.bind((host, port))
@@ -123,3 +98,5 @@ except KeyboardInterrupt:
     print("Server is shutting down")
 finally:
     sel.close()
+
+
