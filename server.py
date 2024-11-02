@@ -28,6 +28,9 @@ def handle_message(sock, data, message):
         msg_type = msg["type"]
         if msg_type == "join":
             serverlib.join_deserial(sock, data, msg["data"])
+            if data not in serverlib.connected_players:
+                serverlib.connected_players.append(data)
+                serverlib.check_and_start_game()
         elif msg_type == "chat":
             serverlib.chat_deserial(sock, data, msg["data"])
         elif msg_type == "quit":
