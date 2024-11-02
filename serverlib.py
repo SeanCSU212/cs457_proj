@@ -11,6 +11,16 @@ CONNECTION_TIMEOUT = 60.0
 
 game_board = [["","","",""],["","","",""],["","","",""],["","","",""]]
 
+connected_players = []
+
+def check_and_start_game():
+    if len(connected_players) == 3:
+        print("3 Players Joined... Starting Game!")
+        
+        start_message = json.dumps({"type": "start", "data": "Game is starting!"}).encode('utf-8')
+        for player_data in connected_players:
+            player_data.outb += start_message
+        broadcast_message("start_broadcast", None)
 
 
 def join_deserial(sock, data, msg_data):

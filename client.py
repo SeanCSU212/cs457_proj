@@ -46,7 +46,11 @@ def process_message(message):
         handle_chat_broadcast(message["data"])
     elif msg_type == "quit_broadcast":
         handle_quit_broadcast(message["data"])
-
+    elif msg_type == "start_broadcast":
+        handle_start_broadcast(message["data"]) 
+        
+def handle_start_broadcast(data):
+    print (f"3 Players Joined... Starting Game!")
 def handle_join_broadcast(data):
     print(f"Player {data['username']} with piece {data['player']} has joined the game.")
 
