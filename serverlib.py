@@ -5,14 +5,9 @@ import json
 
 import game
 
-
-
+sel = selectors.DefaultSelector()
 clients = {}
-
 CONNECTION_TIMEOUT = 60.0
-
-game_board = [["","","",""],["","","",""],["","","",""],["","","",""]]
-
 connected_players = []
 
 def check_and_start_game():
@@ -27,8 +22,6 @@ def check_and_start_game():
         playerO = connected_players[1]
         playerPlus = connected_players[2]
         run_game(playerX, playerO, playerPlus)
-
-        
 
 
 def join_deserial(sock, data, msg_data):
@@ -59,28 +52,48 @@ def quit_deserial(sock, data):
     broadcast_message("quit_broadcast", {"username": username})
     print(f"Player {username} quit the game")
     if sock in clients:
-        del clients[sock]
+        del clients[sock] 
 
 def broadcast_message(msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data})
     for client_socket in clients:
         client_socket.send(message.encode())
 
+def send_message(sock, msg_type, msg_data):
+    message = json.dumps({"type": msg_type, "data": msg_data})
+    sock.send(message.encode())
+
+#Game working methods
+
+
 def run_game(player1, player2, player3):
-    #Create instance of game object, passsing in player 1,2,3
+    #Game setup
+    cur_game = game(player1, player2, player3)
+    game_over = False
+    cur_player = cur_game.order[0]
 
-    #Broadcast starting message to all clients
-    #Broadcast empty game board to all clients
-    #List for active player, list for waiting player, players can only use "move" command when in active list
-
-    #While loop (while win condition has not been met)
-        #Put player 1 in active list, player 2 and 3 in wait state
-        #Accept move from player 1, verify, place on board
-        #Check for win (breaks loop)
-        #Broadcast updated board to to all clients
-        #Incriment active player, move other to waitlist
-
-    print(player1)
-    print(player2)
-    print(player3)
+    broadcast_message("start_message", "Welcome to 3 player tic-tac-toe, the game is turn based, you will enter the number of the space you want to put your mark in.")
+    broadcast_message("ex_board", cur_game.example_board())
+    
+    while not game_over:
+        broadcast_message("display_board", cur_game.display_board())
+        broadcast_message("turn_notification", f"It's {cur_player.username}'s turn")
+        
+        # Place the other two players in a wait state
+        for player in cur_game.wait:
+            send_message(player.sock, "wait_state", "Please wait for your turn.")
+        
+        # TODO Accept move from player 1, verify, place on board
+       
+        #Check for win or tie
+        if cur_game.check_win():
+            broadcast_message("game_over", f"{cur_player.username} wins!")
+            game_over = True
+        elif cur_game.check_draw():
+            broadcast_message("game_over", "It's a draw!")
+            game_over = True
+        else:
+            # Switch to the next player and update wait state
+            cur_game.next_turn()
+            cur_player = cur_game.turn
 

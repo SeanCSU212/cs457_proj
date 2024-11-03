@@ -27,7 +27,19 @@ class game:
             (0, 5, 10), (5, 10, 15), (3, 6, 9), (6, 9, 12),
             (1, 6, 11), (4, 9, 14), (2, 5, 8), (7, 10, 13)
         ]
-        
+    
+    def eample_board():
+        return(
+            "Example Board\n",
+            "1 |2 |3 |4 \n",
+            "--|--|--|--\n",
+            "5 |6 |7 |8 \n",
+            "--|--|--|--\n",
+            "9 |10|11|12\n",
+            "--|--|--|--\n",
+            "13|14|15|16\n",
+        )
+    
     def display_board(self):
         return(
             "Current Board\n",
@@ -57,5 +69,33 @@ class game:
                 self.game_board[input_num - 1] = 'o'
             elif self.turn == self.player3:
                 self.game_board[input_num - 1] = '+'
+            return True
         else:
             return False
+        
+    def next_turn(self):
+        if self.turn == self.order[0]:
+            self.turn = self.order[1]
+            self.wait.remove(self.order[1])
+            self.wait.append(self.order[0])
+        elif self.turn == self.order[1]:
+            self.turn = self.order[2]
+            self.wait.remove(self.order[2])
+            self.wait.append(self.order[1])
+        elif self.turn == self.order[2]:
+            self.turn = self.order[0]
+            self.wait.remove(self.order[0])
+            self.wait.append(self.order[2])
+            
+    def check_win(self):
+        for move_set in self.win_conditions:
+            x, y, z = move_set
+            
+            if self.game_board[x] == self.game_board[y] == self.game_board[z] != ' ':
+                return True
+        return False
+    
+    def check_draw(self):
+        if self.check_win() is None and all(position != ' ' for position in self.game_board):
+            return True
+        return False
