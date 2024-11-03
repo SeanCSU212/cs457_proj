@@ -64,22 +64,13 @@ def send_message(sock, msg_type, msg_data):
     sock.send(message.encode())
 
 #Game working methods
-def receive_move(sock):
-    try:
-        data = sock.recv(1024)
-        if data:
-            message = json.loads(data.decode())
-            if message["type"] == "move":
-                return int(message["data"]["position"])
-    except Exception as e:
-        print(f"Error receiving move: {e}")
-    return None
+
 
 def run_game(player1, player2, player3):
     #Game setup
     cur_game = game(player1, player2, player3)
     game_over = False
-    cur_player = cur_game.turn
+    cur_player = cur_game.order[0]
 
     broadcast_message("start_message", "Welcome to 3 player tic-tac-toe, the game is turn based, you will enter the number of the space you want to put your mark in.")
     broadcast_message("ex_board", cur_game.example_board())

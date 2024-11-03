@@ -61,13 +61,13 @@ class game:
             return True
         
         
-    def make_move(self, input_num):
+    def make_move(self, input_num, player):
         if self.check_move_legality(board_num=input_num):
-            if self.turn == self.player1:
+            if player == self.player1:
                 self.game_board[input_num - 1] = 'x'
-            elif self.turn == self.player2:
+            elif player == self.player2:
                 self.game_board[input_num - 1] = 'o'
-            elif self.turn == self.player3:
+            elif player == self.player3:
                 self.game_board[input_num - 1] = '+'
             return True
         else:
@@ -92,8 +92,8 @@ class game:
             x, y, z = move_set
             
             if self.game_board[x] == self.game_board[y] == self.game_board[z] != ' ':
-                return self.game_board[x]
-        return None
+                return True
+        return False
     
     def check_draw(self):
         if self.check_win() is None and all(position != ' ' for position in self.game_board):
