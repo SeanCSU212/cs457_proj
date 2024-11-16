@@ -40,7 +40,7 @@ def join_deserial(sock, data, msg_data):
 
 def chat_deserial(sock, data, msg_data):
     message = msg_data["message"]
-    sender_id = data.player
+    sender_id = data.username
     print(f"Chat message from {sender_id}: {message}")
     broadcast_message("chat_broadcast", {
         "sender_id": sender_id,
@@ -65,7 +65,7 @@ def send_message(sock, msg_type, msg_data):
 
 #Game working methods
 
-
+'''
 def run_game(player1, player2, player3):
     #Game setup
     cur_game = game(player1, player2, player3)
@@ -96,4 +96,4 @@ def run_game(player1, player2, player3):
             # Switch to the next player and update wait state
             cur_game.next_turn()
             cur_player = cur_game.turn
-
+'''
