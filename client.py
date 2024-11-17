@@ -62,6 +62,8 @@ def process_message(message):
     elif msg_type == "activate_turn":
         active_turn = True
         print("Your turn...")
+    elif msg_type == "deactivate_turn":
+        active_turn = False
     
 
 def handle_gameboard_broadcast(data):
@@ -101,8 +103,6 @@ def main():
             if (active_turn):
                 position = input("Enter # of position you want play on: ").strip()
                 send_message(sock, "move", {"position": position})
-
-                active_turn = False
 
             else:
                 command = input("Enter command (chat/quit): ").strip()
