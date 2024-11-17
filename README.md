@@ -7,10 +7,11 @@ This is a 3 player Tic-Tac-Toe game implemented using Python and sockets. It inv
 3. **Play the game:** Players take turns entering their moves. The first player to get three in a row wins!
 
 ## Game Message Protocol
-* 'join' - Follows up by prompting user for Username, and assigns a playing piece (X,O,+). Command to join game, allows up to 3 player to activly play, and remaining clients to join as spectators. Sends broadcast that new player joined to server and all connected clients.
-* 'chat' - Follows up by promting user for message, broadcasts message back to server and to all connected clients.
-* 'quit' - Allows client to disconnect, sends broadcast to server and all connected clients.
-* 'move' - Follows up by prompting user for coordinate to play (ex: 'A3'). The server then validates that no one has already played in that move, and if it is a valid move, places piece on game board. Server then handles game logic based on this move request.
+* 'join' - Activated upon client connection, Follows up by prompting user for Username, and assigns a playing piece (X,O,+). Allows up to 3 player to activly play, and remaining clients to join as spectators. Sends broadcast that new player joined to server and all connected clients.
+* 'chat' - Activated by user, Follows up by promting user for message, broadcasts message back to server and to all connected clients.
+* 'quit' - Activated by user Allows client to disconnect, sends broadcast to server and all connected clients.
+* 'move' - Activated internally, prompts player to enter number of position (1-16), checks if valid move, and makes move for player.
+* 'activate_turn' - Sent from server to client, toggles 'active_turn' variable in client
 
 
 ## Technologies used
@@ -21,4 +22,13 @@ This is a 3 player Tic-Tac-Toe game implemented using Python and sockets. It inv
 * For more information and strategies on playing the game visit this link: [3 Player Tic-Tac-Toe](https://tictactoefree.com/tips/3-player-tic-tac-toe)
 * [Python Documentation](https://docs.python.org/3/)
 * [Sockets Tutorial]
+
+## Updates
+* 11/16 - Join command updated to activate upon connection
+* 11/16 - Game class updated for integration into server
+* 11/16 - run_game() updated in serverlib
+* 11/16 - Chat command updated to no longer prompt user for username
+* 11/16 - Client updated to have 'active_turn' boolean for turn handling
+
+
 
