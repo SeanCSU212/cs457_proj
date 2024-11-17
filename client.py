@@ -6,7 +6,7 @@ import argparse
 '''ARGUMENT HANDLING FOR STARTING CLIENT PROGRAM'''
 
 parser = argparse.ArgumentParser(
-    description = "Welcome to the Tic-Tac-Toe-Two Client! \nUSAGE: python3 client.py <Server IP> <port>",
+    description = "Welcome to the Tic-Tac-Toe-Two Client! \nUSAGE: python3 client.py -i <Server IP> -p <port>",
     epilog = "HOW TO PLAY: \n\n 1. Wait for 3 players to connect \n 2. Wait for your turn, the server will message you when it is your turn \n 3. Upon your turn, enter the MOVE command, followed by the 2 character letter-number combo of the space you want tot move to. \n(Players can only play on spaces that have not yet been played on) \n4. The first player to get 3 in a row (vertically, horizontally, or diagonally) Wins! \n\n GOOD LUCK!",
     formatter_class=argparse.RawTextHelpFormatter
 )
