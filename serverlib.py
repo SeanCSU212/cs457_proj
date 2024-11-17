@@ -10,6 +10,8 @@ clients = {}
 CONNECTION_TIMEOUT = 60.0
 connected_players = []
 
+
+
 def check_and_start_game():
     if len(connected_players) == 3:
         print("3 Players Joined... Starting Game!")
@@ -18,10 +20,7 @@ def check_and_start_game():
         for player_data in connected_players:
             player_data.outb += start_message
         broadcast_message("start_broadcast", None)
-        playerX  = connected_players[0]
-        playerO = connected_players[1]
-        playerPlus = connected_players[2]
-        run_game(playerX, playerO, playerPlus)
+        run_game()
 
 
 def join_deserial(sock, data, msg_data):
@@ -29,13 +28,15 @@ def join_deserial(sock, data, msg_data):
     data.username = username
     clients[sock] = data
     players = ['X', 'O', '+']
-    data.player = players[len(clients) - 1] 
     
-    if (len(clients) >= 3):
+    if (len(clients) > 3):
         print("Sorry, 3 players already joined! Stay connected to spectate and/or chat")
+        data.player = "Spectator"
+
+    else:
+        data.player = players[len(clients) - 1] 
 
     print(f"{username} joined the game with piece {data.player} ")
-
     broadcast_message("join_broadcast", {"username": username, "player": data.player})
 
 def chat_deserial(sock, data, msg_data):
@@ -54,6 +55,7 @@ def quit_deserial(sock, data):
     if sock in clients:
         del clients[sock] 
 
+
 def broadcast_message(msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data})
     for client_socket in clients:
@@ -63,7 +65,80 @@ def send_message(sock, msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data})
     sock.send(message.encode())
 
-#Game working methods
+def process_move(sock, data, position):
+    player = data.player
+    position_number = int(position)
+
+    if game.check_move_legality(position_number):
+        game.make_move(position_number, player)
+        print(f"Move {position} by {player} accepted.")
+        broadcast_message("gameboard_broadcast", {"game_board": game.display_board()})
+    else:
+        print(f"Move {position} by {player} is illegal.")
+        send_message(sock, "invalid_move", None)
+
+def wait_for_move(player_data):
+    sock = player_data
+    try:
+        recv_data = sock.recv(1024)
+        if not recv_data:
+            raise ConnectionError("Player disconnected.")
+        
+        message = recv_data.decode('utf-8')
+        
+        msg = json.loads(message)
+        if msg["type"] != "move":
+            raise ValueError(f"Unexpected message type: {msg['type']}")
+        move_data = msg["data"]
+        position = move_data["position"]
+        
+        return int(position)
+    except json.JSONDecodeError:
+        raise ValueError("Received invalid JSON for move.")
+    except ConnectionError as e:
+        raise ConnectionError(f"Connection issue with player: {e}")
+    
+
+def run_game():
+    players = ['X', 'O', '+']  
+    current_player_index = 0
+
+    while not game.is_over():
+        current_player = None
+        for client_socket, player_data in clients.items():
+            if player_data.player == players[current_player_index]:
+                current_player = client_socket
+                break
+
+        if current_player is None:
+            print("Error: Could not find current player.")
+            break
+
+        send_message(current_player, "activate_turn", None)
+        print(f"It's {players[current_player_index]}'s turn!")
+
+        move = wait_for_move(current_player)
+        print(f"Player {players[current_player_index]} chose position {move}")
+
+        if game.check_move_legality(move):
+            game.make_move(move, players[current_player_index])  # Assuming `players[current_player_index]` is the current player's piece
+            broadcast_message("gameboard_broadcast", {"game_board": game.display_board()})
+        else:
+            send_message(current_player, "invalid_move", None)
+            continue
+
+        # Switch to the next player
+        current_player_index = (current_player_index + 1) % len(players)
+
+    # Game Over: Announce winner or draw
+    winner = game.get_winner()
+    broadcast_message("game_over", {"winner": winner})
+    
+
+
+
+
+
 
 '''
 def run_game(player1, player2, player3):

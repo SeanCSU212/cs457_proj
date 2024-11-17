@@ -21,26 +21,33 @@ args = parser.parse_args()
 host = args.serveraddress
 port = int(args.port)
 
+active_turn = False
 
 def send_message(sock, msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data})
     sock.sendall(message.encode())
 
 def handle_server_response(sock):
+    buffer = b""
     while True:
         try:
             data = sock.recv(1024)
-            if data:
-                message = json.loads(data.decode())
-                process_message(message)
-            else:
+            if not data:
                 print("Server closed the connection")
                 break
-        except (ConnectionResetError, json.JSONDecodeError):
-            print("Error receiving or parsing server response")
+            buffer += data
+            try:
+                message = json.loads(buffer.decode())
+                process_message(message)
+                buffer = b""  # Clear the buffer after successfully processing a message
+            except json.JSONDecodeError:
+                continue  # Keep reading until we have a complete message
+        except (json.JSONDecodeError) as e:
+            print(f"Error receiving or parsing server response: {e}")
             break
 
 def process_message(message):
+    global active_turn
     msg_type = message["type"]
     if msg_type == "join_broadcast":
         handle_join_broadcast(message["data"])
@@ -50,17 +57,31 @@ def process_message(message):
         handle_quit_broadcast(message["data"])
     elif msg_type == "start_broadcast":
         handle_start_broadcast(message["data"]) 
-        
+    elif msg_type == "gameboard_broadcast":
+        handle_gameboard_broadcast(message["data"])
+    elif msg_type == "activate_turn":
+        active_turn = True
+        print("Your turn...")
+    elif msg_type == "deactivate_turn":
+        active_turn = False
+    
+
+def handle_gameboard_broadcast(data):
+    print(f"\n Current Game Board: \n{data['game_board']}")
+
 def handle_start_broadcast(data):
-    print (f"3 Players Joined... Starting Game!")
+    print (f"\n3 Players Joined... Starting Game!")
+
 def handle_join_broadcast(data):
-    print(f"Player {data['username']} with piece {data['player']} has joined the game.")
+    print(f"\nPlayer {data['username']} with piece {data['player']} has joined the game.")
 
 def handle_chat_broadcast(data):
-    print(f"Chat from {data['sender_id']}: {data['message']}")
+    print(f"\nChat from {data['sender_id']}: {data['message']}")
 
 def handle_quit_broadcast(data):
-    print(f"Player {data['player']} has quit the game.")
+    print(f"\nPlayer {data['player']} has quit the game.")
+
+
 
 
 
@@ -70,20 +91,27 @@ def main():
         
         threading.Thread(target=handle_server_response, args=(sock,)).start()
         
-        '''PROMPT USER FOR NAME FOLLOWING CLIENT SETUP'''
+       #PROMPT USER FOR NAME FOLLOWING CLIENT SETUP
         username = input("Enter username: ")
         send_message(sock, "join", {"username": username})
 
+        #SET CLIENTS PLAY STATE TO FALSE
+        global active_turn
+
         while True:
 
-            
-            command = input("Enter command (chat/quit): ").strip()
-            if command == "chat":
-                message = input("Enter chat message: ").strip()
-                send_message(sock, "chat", {"message": message, "username": username})
-            elif command == "quit":
-                send_message(sock, "quit", {})
-                break
+            if (active_turn):
+                position = input("Enter # of position you want play on: ").strip()
+                send_message(sock, "move", {"position": position})
+
+            else:
+                command = input("Enter command (chat/quit): ").strip()
+                if command == "chat":
+                    message = input("Enter chat message: ").strip()
+                    send_message(sock, "chat", {"message": message, "username": username})
+                elif command == "quit":
+                    send_message(sock, "quit", {})
+                    break
 
 if __name__ == "__main__":
     main()

@@ -24,19 +24,40 @@ port = int(args.port)
 
 def handle_message(sock, data, message):
     try:
+        # Parse the incoming message
         msg = json.loads(message)
         msg_type = msg["type"]
+
         if msg_type == "join":
             serverlib.join_deserial(sock, data, msg["data"])
             if data not in serverlib.connected_players:
                 serverlib.connected_players.append(data)
                 serverlib.check_and_start_game()
+
         elif msg_type == "chat":
             serverlib.chat_deserial(sock, data, msg["data"])
+
         elif msg_type == "quit":
             serverlib.quit_deserial(sock, data)
+
+        elif msg_type == "move":
+            move_data = msg["data"]
+            position = move_data.get("position")
+
+            if position is None:
+                print("Invalid move data: 'position' is missing.")
+                return
+            
+            print(f"Received move: {position} from {data.player}")
+            serverlib.process_move(sock, data, position)  # Ensure serverlib has logic for move processing.
+
+        else:
+            print(f"Unknown message type received: {msg_type}")
+
     except json.JSONDecodeError:
         print("Received invalid JSON message")
+    except KeyError as e:
+        print(f"Missing expected key in message: {e}")
 
 def accept_wrapper(sock):
     try:
