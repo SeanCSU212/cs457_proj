@@ -10,6 +10,8 @@ clients = {}
 CONNECTION_TIMEOUT = 60.0
 connected_players = []
 
+
+
 def check_and_start_game():
     if len(connected_players) == 3:
         print("3 Players Joined... Starting Game!")
@@ -18,10 +20,7 @@ def check_and_start_game():
         for player_data in connected_players:
             player_data.outb += start_message
         broadcast_message("start_broadcast", None)
-        playerX  = connected_players[0]
-        playerO = connected_players[1]
-        playerPlus = connected_players[2]
-        run_game(playerX, playerO, playerPlus)
+        run_game()
 
 
 def join_deserial(sock, data, msg_data):
@@ -29,13 +28,15 @@ def join_deserial(sock, data, msg_data):
     data.username = username
     clients[sock] = data
     players = ['X', 'O', '+']
-    data.player = players[len(clients) - 1] 
     
-    if (len(clients) >= 3):
+    if (len(clients) > 3):
         print("Sorry, 3 players already joined! Stay connected to spectate and/or chat")
+        data.player = "Spectator"
+
+    else:
+        data.player = players[len(clients) - 1] 
 
     print(f"{username} joined the game with piece {data.player} ")
-
     broadcast_message("join_broadcast", {"username": username, "player": data.player})
 
 def chat_deserial(sock, data, msg_data):
@@ -64,6 +65,22 @@ def send_message(sock, msg_type, msg_data):
     sock.send(message.encode())
 
 #Game working methods
+def run_game():
+    # Broadcast initial game board to all clients 
+    print(game.display_board())
+    broadcast_message("gameboard_broadcast", {"game_board": game.display_board()})
+    
+    for client_socket, player_data in clients.items():
+        if player_data.player == "X":
+            send_message(client_socket, "activate_turn", None)
+            print("It's player X's turn!")
+            break
+    
+
+
+
+
+
 
 '''
 def run_game(player1, player2, player3):
