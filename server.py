@@ -13,13 +13,13 @@ import serverlib
 sel = selectors.DefaultSelector()
 parser = argparse.ArgumentParser(description = "Welcome to the Tic-Tac-Toe-Two Server! \nUSAGE: python3 server.py <Server IP> <port>")
 
-parser.add_argument('-i', '--ipaddress', type=str, required=True, help='Host IP Address')
+#parser.add_argument('-i', '--ipaddress', type=str, required=True, help='Host IP Address')
 parser.add_argument('-p', '--port', type=str, required=True, help='Port Number')
 
 args = parser.parse_args()
 
 
-host = args.ipaddress
+host = '0.0.0.0'
 port = int(args.port)
 
 def handle_message(sock, data, message):
