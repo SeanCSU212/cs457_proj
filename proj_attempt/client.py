@@ -1,5 +1,11 @@
 import socket
 import argparse
+import json
+import clientlib
+def send_message(sock, msg_type, msg_data):
+    message = json.dumps({"type": msg_type, "data": msg_data})
+    sock.sendall(message.encode()) 
+
 
 def main():
 
@@ -13,20 +19,23 @@ def main():
     parser.add_argument('-n', '--dns', type=str, )
     args = parser.parse_args()
 
-
     host = args.serveraddress
     port = int(args.port)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((host, port))
+
+        username = input("Enter Username: ")
+        send_message(sock, "join", {"username": username})
         while True:
             try:
-                data = sock.recv(1024).decode()
+                data = sock.recv(1024).decode() 
                 if not data:
                     break
-                print(data, end="")
-                if "your turn" in data.lower():
-                    move = input("Enter your move (1-16): ")
-                    sock.sendall(move.encode())
+                #print(data, end="")
+                clientlib.handle_message(sock, data)
+                #if "your turn" in data.lower():
+                   #move = input("Enter your move (1-16): ")
+                    #sock.sendall(move.encode())
             except KeyboardInterrupt:
                 print("Exiting game.")
                 break
