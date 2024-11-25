@@ -30,11 +30,17 @@ def accept_wrapper(sock):
         print(f"Socket error: {e}")
 
 def start_game():
+    broadcast("start_game", None) # Broadcast starting game message to all Clients
+    broadcast("display_board", {"board": display_board()}) # Broadcast empty game board to all clients
+    send_message(players[turn_index], "your_turn", None)
+
+
+'''def start_game():
     for player in players:
         player.sendall("Game started! Here is the board:\n".encode())
         player.sendall(display_board().encode())
     players[turn_index].send("It's your turn!\n".encode())
-
+'''
 #Handles connections and game logic
 def service_connection(key, mask):
     global turn_index
@@ -73,6 +79,10 @@ def broadcast(msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data})
     for client_socket in player_data:
         client_socket.send(message.encode())
+
+def send_message(sock, msg_type, msg_data):
+    message = json.dumps({"type": msg_type, "data": msg_data})
+    sock.send(message.encode())
 
 def main():
     # Handling for Arguments

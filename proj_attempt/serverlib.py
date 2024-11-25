@@ -19,6 +19,7 @@ def handle_message(sock, data, message):
                 if len(server.players) == 3:
                     server.start_game()
 
+
         else:
             print(f"Unknown message type received: {msg_type}")
 
@@ -32,8 +33,10 @@ def handle_message(sock, data, message):
 def join_deserial(sock, data, msg_data):
     username = msg_data["username"]
     data.username = username
+
     server.player_data[sock] = data
     pieces = ['X', 'O', '+']
+    data.piece = pieces[len(server.players)]
 
-    print(f"{username} joined the game with piece {pieces[len(server.players)]} ")
+    print(f"{username} joined the game with piece {data.piece} ")
     server.broadcast("join_broadcast", {"username": username})
