@@ -1,5 +1,11 @@
 import socket
 import argparse
+import json
+import clientlib
+def send_message(sock, msg_type, msg_data):
+    message = json.dumps({"type": msg_type, "data": msg_data})
+    sock.sendall(message.encode()) 
+
 
 def main():
 
@@ -13,23 +19,51 @@ def main():
     parser.add_argument('-n', '--dns', type=str, )
     args = parser.parse_args()
 
-
     host = args.serveraddress
     port = int(args.port)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((host, port))
-        while True:
-            try:
-                data = sock.recv(1024).decode()
-                if not data:
+        try:
+            sock.connect((host, port))
+            print(f"Connected to server at {host}:{port}")
+
+            # Send the join message
+            username = input("Enter Username: ")
+            send_message(sock, "join", {"username": username})
+
+            # Buffer to handle partial and concatenated messages
+            buffer = ""
+            
+            while True:
+                try:
+                    # Receive data
+                    data = sock.recv(1024).decode("utf-8")
+                    if not data:
+                        print("Disconnected from server.")
+                        break
+                    
+                    # Append data to the buffer
+                    buffer += data
+
+                    # Split messages by the delimiter '\0' and process them
+                    messages = buffer.split("\0")
+                    buffer = messages.pop()  # Keep the last incomplete message in the buffer
+
+                    # Handle all complete messages
+                    for message in messages:
+                        if message.strip():  # Ignore empty messages
+                            clientlib.handle_message(sock, message)
+                
+                except KeyboardInterrupt:
+                    print("Exiting game.")
                     break
-                print(data, end="")
-                if "your turn" in data.lower():
-                    move = input("Enter your move (1-16): ")
-                    sock.sendall(move.encode())
-            except KeyboardInterrupt:
-                print("Exiting game.")
-                break
+                except Exception as e:
+                    print(f"Error during communication: {e}")
+                    break
+
+        except ConnectionRefusedError:
+            print("Failed to connect to the server.")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
 
 if __name__ == "__main__":
     main()
