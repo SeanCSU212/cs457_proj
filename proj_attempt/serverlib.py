@@ -53,7 +53,7 @@ def join_deserial(sock, data, msg_data):
 def move_deserial(sock, data, msg_data):
     move = int(msg_data["move"]) # Integer of position input by active client
     if game.check_move_legality(move): # Check legality of move, if not legal, promp player again
-        game.make_move(move, ' X' if server.turn_index == 0 else ' O' if server.turn_index == 1 else ' ❤') # Make move
+        game.make_move(move, ' X' if server.turn_index == 0 else ' O' if server.turn_index == 1 else ' +') # Make move
         server.broadcast("move_broadcast", {"player": server.players[server.turn_index].username, "move": move}) # Broadcast move to all players
         server.broadcast("display_board", {"board": server.display_board()})
         if game.is_over():
