@@ -1,6 +1,7 @@
 import socket
 import selectors
 import types
+import argparse
 from game import *
 
 sel = selectors.DefaultSelector()
@@ -52,7 +53,13 @@ def broadcast(message):
         player.sendall(message.encode())
 
 def main():
-    host, port = "127.0.0.1", 12345
+    # Handling for Arguments
+    parser = argparse.ArgumentParser(description = "Welcome to the Tic-Tac-Toe-Two Server! \nUSAGE: python3 server.py -p <port>")
+    parser.add_argument('-p', '--port', type=str, required=True, help='Port Number')
+    args = parser.parse_args()
+    host = '0.0.0.0' # Set static listening IP
+    port = int(args.port)
+
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.bind((host, port))
     server_sock.listen()
