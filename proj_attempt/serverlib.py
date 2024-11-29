@@ -60,7 +60,7 @@ def move_deserial(sock, data, msg_data):
             if game.check_win():
                 server.broadcast("game_over_win", {"winner": server.players[server.turn_index].username})
             else:
-                sever.broadcast("game_over_draw", None)
+                server.broadcast("game_over_draw", None)
         else:
             server.turn_index = (server.turn_index + 1) % 3
             server.send_message(server.players[server.turn_index].sock, "your_turn", None)

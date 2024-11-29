@@ -44,6 +44,7 @@ def start_game():
 
     # Send "your_turn" message to the current player's socket
     send_message(players[turn_index].sock, "your_turn", None)
+    
 
 #Handles connections and game logic
 def service_connection(key, mask):

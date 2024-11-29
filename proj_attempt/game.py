@@ -14,14 +14,25 @@ win_conditions = [
 
 def display_board():
     return (
-        f"{game_board[0]}|{game_board[1]}|{game_board[2]}|{game_board[3]}\n"
-        f"--|--|--|--\n"
-        f"{game_board[4]}|{game_board[5]}|{game_board[6]}|{game_board[7]}\n"
-        f"--|--|--|--\n"
-        f"{game_board[8]}|{game_board[9]}|{game_board[10]}|{game_board[11]}\n"
-        f"--|--|--|--\n"
-        f"{game_board[12]}|{game_board[13]}|{game_board[14]}|{game_board[15]}\n"
+        f"╔═══════════════════════════════════╗\n"
+        f"║        ║        ║        ║        ║\n"
+        f"║   {game_board[0]}   ║   {game_board[1]}   ║   {game_board[2]}   ║   {game_board[3]}   ║\n"
+        f"║        ║        ║        ║        ║\n"
+        f"╠ ═══════╬════════╬════════╬═══════ ╣\n"
+        f"║        ║        ║        ║        ║\n"
+        f"║   {game_board[4]}   ║   {game_board[5]}   ║   {game_board[6]}   ║   {game_board[7]}   ║\n"
+        f"║        ║        ║        ║        ║\n"
+        f"╠ ═══════╬════════╬════════╬═══════ ╣\n"
+        f"║        ║        ║        ║        ║\n"
+        f"║   {game_board[8]}   ║   {game_board[9]}   ║   {game_board[10]}   ║   {game_board[11]}   ║\n"
+        f"║        ║        ║        ║        ║\n"
+        f"╠ ═══════╬════════╬════════╬═══════ ╣\n"
+        f"║        ║        ║        ║        ║\n"
+        f"║   {game_board[12]}   ║   {game_board[13]}   ║   {game_board[14]}   ║   {game_board[15]}   ║\n"
+        f"║        ║        ║        ║        ║\n"
+        f"╚═══════════════════════════════════╝\n"
     )
+
 
 def check_move_legality(input_num):
     input_index = input_num - 1
@@ -50,3 +61,5 @@ def is_over():
         return True
     else:
         return False
+
+#print(display_board())

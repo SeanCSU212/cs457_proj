@@ -16,11 +16,21 @@ def handle_message(sock, data):
 
         # Handling for game start
         elif msg_type == "start_game":
-            print(f"\n3 Player joined! Starting game...\nWelcome to Tic-Tac-Toe-Two!\nCurrent Game Board: \n {msg_data['board']}")
+            print(f"\n3 Player joined! Starting game..." +
+                  f"\n\nWelcome to " +
+                  f"\n  _____ _         _____             _____              _____               " +
+                  f"\n |_   _(_) ___   |_   _|_ _  ___   |_   _|__   ___    |_   _|_      _____  " +
+                  f"\n   | | | |/ __|____| |/ _` |/ __|____| |/ _ \ / _ \_____| | \ \ /\ / / _ \ " +
+                  f"\n   | | | | (_|_____| | (_| | (_|_____| | (_) |  __/_____| |  \ V  V / (_) |" +
+                  f"\n   |_| |_|\___|    |_|\__,_|\___|    |_|\___/ \___|     |_|   \_/\_/ \___/ " +
+                  f"\n                                                                           " +
+                  f" \nHow to play: \n1. Wait for the server to prompt your turn \n2. Upon your turn, enter the number of the position you want to play your piece \n3. Be the first to place 3 pieces in a row (vertically, horizontally, or diagonally) to win!" +
+                  f"\n\nGood Luck!\n\n" +
+                  f"\nCurrent Game Board: \n\n{msg_data['board']}\n")
        
         # Handling for display board
         elif msg_type == "display_board":
-            print(f"Current Game Board: \n{msg_data['board']}")
+            print(f"Current Game Board: \n\n{msg_data['board']}\n")
        
         # Handling for turn input
         elif msg_type == "your_turn":
