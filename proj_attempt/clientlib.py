@@ -35,9 +35,13 @@ def handle_message(sock, data):
         elif msg_type == "invalid_move":
             print(f"\n Invalid Move, cannot place piece on positon {msg_data['move']}... Try again.")
 
-        # Handling for game_over
-        elif msg_type == "game_over":
+        # Handling for game_over with winner
+        elif msg_type == "game_over_win":
             print(f"GAME OVER! {msg_data['winner']} won the game!")
+        
+        # Handling for game_over from draw
+        elif msg_type == "game_over_draw":
+            print(f"GAME OVER! No winner...")
 
     except json.JSONDecodeError:
         print(f"Failed to decode message: {data}") 
