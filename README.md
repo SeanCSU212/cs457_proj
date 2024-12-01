@@ -1,4 +1,9 @@
-# 3-Player-Tic-Tac-Toe Game
+#  _____ _         _____             _____              _____               
+# |_   _(_) ___   |_   _|_ _  ___   |_   _|__   ___    |_   _|_      _____  
+#   | | | |/ __|____| |/ _` |/ __|____| |/ _ \ / _ \_____| | \ \ /\ / / _ \ 
+#   | | | | (_|_____| | (_| | (_|_____| | (_) |  __/_____| |  \ V  V / (_) |
+#   |_| |_|\___|    |_|\__,_|\___|    |_|\___/ \___|     |_|   \_/\_/ \___/ 
+                                                                           
 This is a 3 player Tic-Tac-Toe game implemented using Python and sockets. It involves a 4x4 grid to play. Player one is X, player two is O, and player 3 is +.
 
 ## How to play
