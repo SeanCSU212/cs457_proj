@@ -4,6 +4,7 @@ import types
 import json
 import game
 import server
+from server import players
 
 def handle_message(sock, data, message):
     try:
@@ -40,8 +41,6 @@ def join_deserial(sock, data, msg_data):
     username = msg_data["username"]
     data.username = username
     data.sock = sock
-
-    #server.player_data[sock] = data
     pieces = ['X', 'O', '+']
     data.piece = pieces[len(server.players)]
 
@@ -51,16 +50,30 @@ def join_deserial(sock, data, msg_data):
 # Handles moves made by player and game logic
 
 def move_deserial(sock, data, msg_data):
+    global players
+
     move = int(msg_data["move"]) # Integer of position input by active client
+
     if game.check_move_legality(move): # Check legality of move, if not legal, promp player again
         game.make_move(move, ' X' if server.turn_index == 0 else ' O' if server.turn_index == 1 else ' +') # Make move
         server.broadcast("move_broadcast", {"player": server.players[server.turn_index].username, "move": move}) # Broadcast move to all players
         server.broadcast("display_board", {"board": server.display_board()})
+        print(game.display_board())
+        
         if game.is_over():
             if game.check_win():
                 server.broadcast("game_over_win", {"winner": server.players[server.turn_index].username})
             else:
                 server.broadcast("game_over_draw", None)
+
+            game.reset_game_board()
+
+            print(game.display_board())
+            server.broadcast("play_again", None)
+            players.clear()
+
+
+
         else:
             server.turn_index = (server.turn_index + 1) % 3
             server.send_message(server.players[server.turn_index].sock, "your_turn", None)

@@ -1,10 +1,10 @@
 import client
 import json
+import sys
 
 
 def handle_message(sock, data):
     try:
-        #print(data) #print entire message data  for debugging
         # Parse the message
         msg = json.loads(data)
         msg_type = msg.get("type")
@@ -39,7 +39,7 @@ def handle_message(sock, data):
 
         # Handling for moves made by other players
         elif msg_type == 'move_broadcast':
-            print(f"\n{msg_data['player']} placed a piece of position {msg_data['move']}")     
+            print(f"\n{msg_data['player']} placed a piece on position {msg_data['move']}")     
 
         # Handling for invalid move
         elif msg_type == "invalid_move":
@@ -52,6 +52,23 @@ def handle_message(sock, data):
         # Handling for game_over from draw
         elif msg_type == "game_over_draw":
             print(f"GAME OVER! No winner...")
+        
+        # Handling for end of game
+        elif msg_type == "play_again":
+            end_of_game(sock)
+            
+
 
     except json.JSONDecodeError:
         print(f"Failed to decode message: {data}") 
+
+def end_of_game(sock):
+    choice = input("Do you want to play again or quit? (type 'play' to play again or 'quit' to exit): ").strip().lower()
+    if choice == 'play':
+        username = input("Enter Username: ")
+        client.send_message(sock, "join", {"username": username})
+    elif choice == 'quit':
+        print("\nLeaving game...")
+        sys.exit()
+    else:
+        end_of_game()

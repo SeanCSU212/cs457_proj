@@ -1,4 +1,6 @@
+
 game_board = [' 1',' 2',' 3',' 4',' 5',' 6',' 7',' 8',' 9','10','11','12','13','14','15','16']
+
 
 win_conditions = [
         #Rows
@@ -11,6 +13,7 @@ win_conditions = [
         (0, 5, 10), (5, 10, 15), (3, 6, 9), (6, 9, 12),
         (1, 6, 11), (4, 9, 14), (2, 5, 8), (7, 10, 13)
 ]
+
 
 def display_board():
     return (
@@ -62,4 +65,6 @@ def is_over():
     else:
         return False
 
-#print(display_board())
+def reset_game_board():
+    global game_board
+    game_board = [' 1',' 2',' 3',' 4',' 5',' 6',' 7',' 8',' 9','10','11','12','13','14','15','16']
