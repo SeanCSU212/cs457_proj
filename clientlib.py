@@ -4,7 +4,6 @@ import json
 
 def handle_message(sock, data):
     try:
-        #print(data) #print entire message data  for debugging
         # Parse the message
         msg = json.loads(data)
         msg_type = msg.get("type")
@@ -39,7 +38,7 @@ def handle_message(sock, data):
 
         # Handling for moves made by other players
         elif msg_type == 'move_broadcast':
-            print(f"\n{msg_data['player']} placed a piece of position {msg_data['move']}")     
+            print(f"\n{msg_data['player']} placed a piece on position {msg_data['move']}")     
 
         # Handling for invalid move
         elif msg_type == "invalid_move":

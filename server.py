@@ -18,11 +18,6 @@ def accept_wrapper(sock):
         print(f"Accepted connection from {addr}") # Log connection from client
         conn.setblocking(False)
         sel.register(conn, selectors.EVENT_READ, data=types.SimpleNamespace(addr=addr))
-        #players.append(conn) # Add socket to list of players 
-        #conn.sendall(f"Welcome player {len(players)}\n".encode()) # Send welcome message to clients
-
-        #if len(players) == 3:
-            #start_game()
 
     except socket.timeout:
         print(f"Connection timed out after {CONNECTION_TIMEOUT} seconds") # type: ignore
@@ -32,10 +27,6 @@ def accept_wrapper(sock):
 def start_game():
     # Broadcast starting game message to all clients
     broadcast("start_game", {"board": display_board()})
-
-    # Broadcast empty game board to all clients
-    #current_board = display_board()
-    #broadcast("display_board", {"board": current_board})
 
     # Informative prints on the server side
     print(players[turn_index])

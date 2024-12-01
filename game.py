@@ -62,4 +62,3 @@ def is_over():
     else:
         return False
 
-#print(display_board())
