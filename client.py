@@ -30,7 +30,7 @@ def main():
             print(f"Connected to server at {host}:{port}")
 
             # Send the join message
-            username = input("Enter Username: ")
+            username = input("\nEnter Username: ")
             send_message(sock, "join", {"username": username})
 
             # Buffer to handle partial and concatenated messages
