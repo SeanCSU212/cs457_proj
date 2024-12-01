@@ -30,12 +30,22 @@ def handle_message(sock, data):
        
         # Handling for display board
         elif msg_type == "display_board":
-            print(f"Current Game Board: \n\n{msg_data['board']}\n")
+            print(f"\nCurrent Game Board: \n\n{msg_data['board']}\n")
+        
+        # Handling for display board
+        elif msg_type == "display_board_numbers":
+            print(f"\nChoose an available number to place piece: \n\n{msg_data['board']}\n")
+
        
         # Handling for turn input
         elif msg_type == "your_turn":
+            print("\nIt's your turn... ")
             move = input("\nEnter move (1-16): ")
             client.send_message(sock, "make_move", {"move": move})
+        
+        # Handlign for waiting for turn
+        elif msg_type == "wait_for_turn":
+            print(f"\n{msg_data['player']} is making their move...")
 
         # Handling for moves made by other players
         elif msg_type == 'move_broadcast':
@@ -47,15 +57,17 @@ def handle_message(sock, data):
 
         # Handling for game_over with winner
         elif msg_type == "game_over_win":
-            print(f"GAME OVER! {msg_data['winner']} won the game!")
+            print(f"\nGAME OVER! {msg_data['winner']} won the game!")
         
         # Handling for game_over from draw
         elif msg_type == "game_over_draw":
-            print(f"GAME OVER! No winner...")
+            print(f"\nGAME OVER! No winner...")
         
         # Handling for end of game
         elif msg_type == "play_again":
             end_of_game(sock)
+
+        
             
 
 
@@ -63,9 +75,9 @@ def handle_message(sock, data):
         print(f"Failed to decode message: {data}") 
 
 def end_of_game(sock):
-    choice = input("Do you want to play again or quit? (type 'play' to play again or 'quit' to exit): ").strip().lower()
+    choice = input("\nDo you want to play again or quit? (type 'play' to play again or 'quit' to exit): ").strip().lower()
     if choice == 'play':
-        username = input("Enter Username: ")
+        username = input("\nEnter Username: ")
         client.send_message(sock, "join", {"username": username})
     elif choice == 'quit':
         print("\nLeaving game...")

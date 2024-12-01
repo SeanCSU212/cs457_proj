@@ -41,8 +41,11 @@ def join_deserial(sock, data, msg_data):
     username = msg_data["username"]
     data.username = username
     data.sock = sock
-    pieces = ['X', 'O', '+']
-    data.piece = pieces[len(server.players)]
+    pieces = ["X", "O", "+"]
+    if len(server.players) <= 3:
+        data.piece = pieces[len(server.players)]
+    else:
+        data.peice = "Spectator"
 
     print(f"{username} joined the game with piece {data.piece} ")
     server.broadcast("join_broadcast", {"username": username})
@@ -76,7 +79,17 @@ def move_deserial(sock, data, msg_data):
 
         else:
             server.turn_index = (server.turn_index + 1) % 3
-            server.send_message(server.players[server.turn_index].sock, "your_turn", None)
+            
+            for x in range(3):
+                if x == server.turn_index:
+                    server.send_message(server.players[x].sock, "display_board_numbers", {"board": server.display_board_numbers()})
+                    server.send_message(server.players[x].sock, "your_turn", None)
+
+                else:
+                    server.send_message(server.players[x].sock, "wait_for_turn", {"player": server.players[server.turn_index].username})
+                
+            
+            
     else:   # Prompt player to resubmit move
         server.send_message(server.players[server.turn_index].sock, "invalid_move", {"move": move})
         server.send_message(server.players[server.turn_index].sock, "your_turn", None)

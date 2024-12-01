@@ -4,6 +4,7 @@ import types
 import argparse
 import json
 import serverlib
+import logging
 from game import *
 
 
@@ -12,6 +13,7 @@ players = []
 turn_index = 0
 
 def accept_wrapper(sock):
+    
     try:
         conn, addr = sock.accept()
         print(f"Accepted connection from {addr}") # Log connection from client
@@ -22,6 +24,8 @@ def accept_wrapper(sock):
         print(f"Connection timed out after {CONNECTION_TIMEOUT} seconds") # type: ignore
     except socket.error as e:
         print(f"Socket error: {e}")
+    else:
+        logging.error("Error: Client attempted to join a game that was full")
 
 def start_game():
     # Broadcast starting game message to all clients
@@ -33,6 +37,7 @@ def start_game():
     print(display_board())
 
     # Send "your_turn" message to the current player's socket
+    send_message(players[turn_index].sock, "display_board_numbers", {"board": display_board_numbers()})
     send_message(players[turn_index].sock, "your_turn", None)
     
 

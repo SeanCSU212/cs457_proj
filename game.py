@@ -1,6 +1,6 @@
 
-game_board = [' 1',' 2',' 3',' 4',' 5',' 6',' 7',' 8',' 9','10','11','12','13','14','15','16']
-
+game_board_numbers = [' 1',' 2',' 3',' 4',' 5',' 6',' 7',' 8',' 9','10','11','12','13','14','15','16']
+game_board = ['  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ']
 
 win_conditions = [
         #Rows
@@ -35,7 +35,26 @@ def display_board():
         f"║        ║        ║        ║        ║\n"
         f"╚═══════════════════════════════════╝\n"
     )
-
+def display_board_numbers():
+    return (
+        f"╔═══════════════════════════════════╗\n"
+        f"║        ║        ║        ║        ║\n"
+        f"║   {game_board_numbers[0]}   ║   {game_board_numbers[1]}   ║   {game_board_numbers[2]}   ║   {game_board_numbers[3]}   ║\n"
+        f"║        ║        ║        ║        ║\n"
+        f"╠ ═══════╬════════╬════════╬═══════ ╣\n"
+        f"║        ║        ║        ║        ║\n"
+        f"║   {game_board_numbers[4]}   ║   {game_board_numbers[5]}   ║   {game_board_numbers[6]}   ║   {game_board_numbers[7]}   ║\n"
+        f"║        ║        ║        ║        ║\n"
+        f"╠ ═══════╬════════╬════════╬═══════ ╣\n"
+        f"║        ║        ║        ║        ║\n"
+        f"║   {game_board_numbers[8]}   ║   {game_board_numbers[9]}   ║   {game_board_numbers[10]}   ║   {game_board_numbers[11]}   ║\n"
+        f"║        ║        ║        ║        ║\n"
+        f"╠ ═══════╬════════╬════════╬═══════ ╣\n"
+        f"║        ║        ║        ║        ║\n"
+        f"║   {game_board_numbers[12]}   ║   {game_board_numbers[13]}   ║   {game_board_numbers[14]}   ║   {game_board_numbers[15]}   ║\n"
+        f"║        ║        ║        ║        ║\n"
+        f"╚═══════════════════════════════════╝\n"
+    )
 
 def check_move_legality(input_num):
     input_index = input_num - 1
@@ -46,11 +65,13 @@ def check_move_legality(input_num):
     
 def make_move(input_num, player):
         game_board[input_num - 1] = player
+        game_board_numbers[input_num - 1] = player
+
         
 def check_win():
     for move_set in win_conditions:
         x, y, z = move_set
-        if game_board[x] == game_board[y] == game_board[z] != ' ':
+        if game_board_numbers[x] == game_board_numbers[y] == game_board_numbers[z] != ' ':
             return True
     return False
 
@@ -67,4 +88,6 @@ def is_over():
 
 def reset_game_board():
     global game_board
-    game_board = [' 1',' 2',' 3',' 4',' 5',' 6',' 7',' 8',' 9','10','11','12','13','14','15','16']
+    global game_board_numbers
+    game_board_numbers = [' 1',' 2',' 3',' 4',' 5',' 6',' 7',' 8',' 9','10','11','12','13','14','15','16']
+    game_board = ['  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ','  ']
