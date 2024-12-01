@@ -9,7 +9,6 @@ from game import *
 
 sel = selectors.DefaultSelector()
 players = []
-player_data = {}
 turn_index = 0
 
 def accept_wrapper(sock):
