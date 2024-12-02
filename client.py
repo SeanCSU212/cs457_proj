@@ -2,12 +2,12 @@ import socket
 import argparse
 import json
 import clientlib
-import atexit
-import sys
 import ssl
 
 username = ""
 sock = None
+
+''' Code for sending message to server '''
 
 def send_message(sock, msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data})

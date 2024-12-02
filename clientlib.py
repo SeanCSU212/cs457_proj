@@ -2,6 +2,7 @@ import client
 import json
 import sys
 
+''' Code for accepting, deserializing, and handling JSON messages from server '''
 
 def handle_message(sock, data):
     try:
@@ -67,14 +68,15 @@ def handle_message(sock, data):
         elif msg_type == "play_again":
             end_of_game(sock)
 
+        # Handling for player quitting
         elif msg_type == "quit_broadcast":
             print(f"{msg_data['player']} has quit the game... ")
         
-            
-
-
     except json.JSONDecodeError:
         print(f"Failed to decode message: {data}") 
+
+
+''' Code for handling game ending gracefully '''
 
 def end_of_game(sock):
     choice = input("\nDo you want to play again or quit? (type 'play' to play again or 'quit' to exit): ").strip().lower()
