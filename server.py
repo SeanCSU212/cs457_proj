@@ -5,6 +5,7 @@ import argparse
 import json
 import serverlib
 import logging
+import ssl
 from game import *
 
 
@@ -24,8 +25,6 @@ def accept_wrapper(sock):
         print(f"Connection timed out after {CONNECTION_TIMEOUT} seconds") # type: ignore
     except socket.error as e:
         print(f"Socket error: {e}")
-    else:
-        logging.error("Error: Client attempted to join a game that was full")
 
 def start_game():
     # Broadcast starting game message to all clients
@@ -74,8 +73,14 @@ def main():
     args = parser.parse_args()
     host = '0.0.0.0' # Set static listening IP
     port = int(args.port)
-
+    
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    # Encrypting connection
+    sec_con = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    sec_con.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
+    server_sock = sec_con.wrap_socket(server_sock, server_side=True)
+
     server_sock.bind((host, port))
     server_sock.listen()
     server_sock.setblocking(False)
