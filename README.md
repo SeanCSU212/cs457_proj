@@ -21,10 +21,22 @@ Tic-Tac-Toe-Two is a terminal based game built within python. The game was creat
 ## Game Message Protocol
 
 Tic-Tac-Toe-Two was developed to use a standard JSON message protocol for all communications between the server and client.
+*Server-to-Client Message Types*
+- 'join_broadcast' - Sends message that a player has joined.
+- 'start_game' - Sends message once 3 players have joined that the game is starting.
+- 'display_board' - Sends message containing current formatted game board.
+- 'display_board_numbers' - Sends message containing current formatted game board, with numbered positions. Meant to make playing move more intuitive when turn is prompted.
+- 'your_turn' - Sends message prompting player for move input.
+- 'wait_for_turn' - Sends message of current player making move to players who are not actively making move.
+- 'move_broadcast' - Sends message of players move updating game state for all players.
+- 'invalid_move' - Sends message when move input is invalid.
+- 'game_over_win' - Sends message containing Winner of game.
+- 'game_over_draw' - Sends message that game is over with no winner.
+- 'play_again' - Sends message asking player if they would like to play again, or quit the program.
+- 'quit_broadcast'- Sends message when player quits game.
 
+*Client-to-Server Message Types
 - 'join' - Activated upon client connection, Follows up by prompting user for Username, and assigns a playing piece (X,O,+). Allows up to 3 player to activly play, and remaining clients to join as spectators. Sends broadcast that new player joined to server and all connected clients.
-
-- 'chat' - Activated by user, Follows up by prompting user for message, broadcasts message back to server and to all connected clients.
 
 - 'quit' - Activated by user Allows client to disconnect, sends broadcast to server and all connected clients.
 
