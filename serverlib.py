@@ -4,7 +4,7 @@ import types
 import json
 import game
 import server
-from server import players
+from server import players, sel
 
 def handle_message(sock, data, message):
     try:
@@ -23,7 +23,6 @@ def handle_message(sock, data, message):
         elif msg_type == "make_move":
             move_deserial(sock, data, msg["data"])
             return
-
 
         else:
             print(f"Unknown message type received: {msg_type}")
@@ -50,11 +49,36 @@ def join_deserial(sock, data, msg_data):
     print(f"{username} joined the game with piece {data.piece} ")
     server.broadcast("join_broadcast", {"username": username})
 
+def handle_client_disconnection(sock):
+    
+    disconnected_player = None
+    for player in players:
+        if player.sock == sock:
+            disconnected_player = player
+            players.remove(player)
+            break
+
+    if disconnected_player:
+        # Broadcast quit message
+        server.broadcast("quit_broadcast", {"player": disconnected_player.username})
+        if len(players) == 2: # game was ongoing
+            server.broadcast("game_over_draw", None)
+            game.reset_game_board()
+            server.broadcast("play_again", None)
+            players.clear()
+        sock.close()
+        
+
+
 # Handles moves made by player and game logic
 
 def move_deserial(sock, data, msg_data):
     global players
-
+    if len(players) < 3: # if game inactive return
+        return
+    if msg_data["move"] == "":
+        server.send_message(server.players[server.turn_index].sock, "invalid_move", {"move": ""})
+        server.send_message(server.players[server.turn_index].sock, "your_turn", None)
     move = int(msg_data["move"]) # Integer of position input by active client
 
     if game.check_move_legality(move): # Check legality of move, if not legal, promp player again

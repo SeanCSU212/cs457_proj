@@ -24,8 +24,7 @@ def accept_wrapper(sock):
         print(f"Connection timed out after {CONNECTION_TIMEOUT} seconds") # type: ignore
     except socket.error as e:
         print(f"Socket error: {e}")
-    else:
-        logging.error("Error: Client attempted to join a game that was full")
+    
 
 def start_game():
     # Broadcast starting game message to all clients
@@ -48,15 +47,24 @@ def service_connection(key, mask):
     data = key.data 
 
     if mask & selectors.EVENT_READ:
-        message = sock.recv(1024).decode('utf-8').strip()
-        if message:
-            try:
-                serverlib.handle_message(sock, data, message)
-                
-            except socket.timeout:
-                print(f"Connection timed out after {CONNECTION_TIMEOUT} seconds") # type: ignore
-            except socket.error as e:
-                print(f"Socket error while receiving communication: {e}")
+        try:
+            message = sock.recv(1024).decode('utf-8').strip()
+            if message:
+                    try:
+                        serverlib.handle_message(sock, data, message)
+                    except socket.error as e:
+                        print(f"Socket error while receiving communication: {e}")
+            else:
+                # Handle client disconnection
+                print(f"Client {data.addr} disconnected.")
+                serverlib.handle_client_disconnection(sock)
+                sel.unregister(sock)
+        except ConnectionResetError:
+            # Handle abrupt disconnection
+            print(f"Client {data.addr} abruptly disconnected.")
+            serverlib.handle_client_disconnection(sock)
+            sel.unregister(sock)
+
  
 def broadcast(msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data}) + "\0"
