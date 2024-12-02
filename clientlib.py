@@ -87,4 +87,4 @@ def end_of_game(sock):
         print("\nLeaving game...")
         sys.exit()
     else:
-        end_of_game()
+        end_of_game(sock)
