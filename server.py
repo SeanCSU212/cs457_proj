@@ -18,6 +18,8 @@ sel = selectors.DefaultSelector()
 players = []
 turn_index = 0
 
+''' Code for accepting client connections'''
+
 def accept_wrapper(sock):
     try:
         conn, addr = sock.accept()
@@ -30,19 +32,8 @@ def accept_wrapper(sock):
     except socket.error as e:
         logging.error(f"Socket error: {e}")
 
-def start_game():
-    # Broadcast starting game message to all clients
-    broadcast("start_game", {"board": display_board()})
+''' Code for handling connections and messages from clients'''
 
-    logging.info(f"Players: {players[turn_index]}")
-    logging.info("\n3 Players joined, starting game\n")
-    logging.info(display_board())
-
-    # Send "your_turn" message to the current player's socket
-    send_message(players[turn_index].sock, "display_board_numbers", {"board": display_board_numbers()})
-    send_message(players[turn_index].sock, "your_turn", None)
-
-# Handles connections and game logic
 def service_connection(key, mask):
     global turn_index
     sock = key.fileobj
@@ -67,6 +58,10 @@ def service_connection(key, mask):
             serverlib.handle_client_disconnection(sock)
             sel.unregister(sock)
 
+
+''' Code for sending messages to clients. '''
+
+# Broadcast sends message to 
 def broadcast(msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data}) + "\0"
     for client_socket in players:

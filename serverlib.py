@@ -13,6 +13,9 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
+
+''' Code for accepting, deserializing, and handling JSON messages from client '''
+
 def handle_message(sock, data, message):
     try:
         # Parse the incoming message
@@ -24,7 +27,7 @@ def handle_message(sock, data, message):
             if data not in server.players:
                 server.players.append(data)
                 if len(server.players) == 3:
-                    server.start_game()
+                    start_game()
             return
         elif msg_type == "make_move":
             move_deserial(sock, data, msg["data"])
@@ -39,6 +42,8 @@ def handle_message(sock, data, message):
         logging.error(f"Missing expected key in message: {e}")
 
 
+''' Code for handling joining of players '''
+
 def join_deserial(sock, data, msg_data):
     username = msg_data["username"]
     data.username = username
@@ -52,6 +57,8 @@ def join_deserial(sock, data, msg_data):
     logging.info(f"{username} joined the game with piece {data.piece}.")
     server.broadcast("join_broadcast", {"username": username})
 
+
+''' Code for handling intentional/unintentional disconnection of clients'''
 
 def handle_client_disconnection(sock):
     disconnected_player = None
@@ -73,7 +80,23 @@ def handle_client_disconnection(sock):
         sock.close()
 
 
-# Handles moves made by players and game logic
+''' Code for handling the start of game'''
+
+def start_game():
+    # Broadcast starting game message to all clients
+    server.broadcast("start_game", {"board": server.display_board()})
+
+    logging.info(f"Players: {players[server.turn_index]}")
+    logging.info("\n3 Players joined, starting game\n")
+    logging.info(server.display_board())
+
+    # Send "your_turn" message to the current player's socket
+    server.send_message(players[server.turn_index].sock, "display_board_numbers", {"board": server.display_board_numbers()})
+    server.send_message(players[server.turn_index].sock, "your_turn", None)
+
+
+''' Code for accepting moves from players, and handling all game logic '''
+
 def move_deserial(sock, data, msg_data):
     global players
     if len(players) < 3:  # If game is inactive, return
