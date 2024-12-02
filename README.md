@@ -60,4 +60,6 @@ In terms of security, we have accounted for encryption but not authentication:
 - For more information and strategies on playing the game visit this link: [3 Player Tic-Tac-Toe](https://tictactoefree.com/tips/3-player-tic-tac-toe)
 
 - [Python Documentation](https://docs.python.org/3/)
-
+## Known Bugs
+- When player quits, the player in the middle of the turn is not notified until after they submit their turn.
+- When player joins while game is running/full, the server throws error.
