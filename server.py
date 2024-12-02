@@ -83,7 +83,7 @@ def main():
     
     # Encrypting connection and wrapping socket
     sec_con = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-    sec_con.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
+    sec_con.load_cert_chain(certfile="./secure/cert.pem", keyfile="./secure/key.pem")
     server_sock = sec_con.wrap_socket(server_sock, server_side=True)
     
     server_sock.bind((host, port))
