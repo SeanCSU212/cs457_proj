@@ -4,6 +4,7 @@ import json
 import clientlib
 import atexit
 import sys
+import ssl
 
 username = ""
 sock = None
@@ -26,53 +27,61 @@ def main():
 
     host = args.serveraddress
     port = int(args.port)
+    
+    con_sec = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    con_sec.load_verify_locations('cert.pem')
+    
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        try:
-            sock.connect((host, port))
-            print(f"Connected to server at {host}:{port}")
-
+        #Wrap socket
+        with con_sec.wrap_socket(sock, server_hostname=host) as ssock:
             
-            # Send the join message
-            username = input("\nEnter Username: ")
-            send_message(sock, "join", {"username": username})
+            try:
+                ssock.connect((host, port))
+                print(f"Connected to server at {host}:{port}")
 
-            # Buffer to handle partial and concatenated messages
-            buffer = ""
-            
-            while True:
-                try:
-                    # Receive data
-                    data = sock.recv(1024).decode("utf-8")
-                    if not data:
-                        print("Disconnected from server.")
-                        break
-                    
-                    # Append data to the buffer
-                    buffer += data
-
-                    # Split messages by the delimiter '\0' and process them
-                    messages = buffer.split("\0")
-                    buffer = messages.pop()  # Keep the last incomplete message in the buffer
-
-                    # Handle all complete messages
-                    for message in messages:
-                        if message.strip():  # Ignore empty messages
-                            clientlib.handle_message(sock, message)
                 
-                except KeyboardInterrupt:
+                # Send the join message
+                username = input("\nEnter Username: ")
+                send_message(ssock, "join", {"username": username})
 
-                    print("Exiting game.")
-                    break
-                except Exception as e:
-                    print(f"Error during communication: {e}")
-                    break
+                # Buffer to handle partial and concatenated messages
+                buffer = ""
+                
+                while True:
+                    try:
+                        # Receive data
+                        data = ssock.recv(1024).decode("utf-8")
+                        if not data:
+                            print("Disconnected from server.")
+                            break
+                        
+                        # Append data to the buffer
+                        buffer += data
 
-        except ConnectionRefusedError:
-            print("Failed to connect to the server.")
-        except Exception as e:
-            print(f"Unexpected error: {e}")
-        finally:  
-            sock.close()
+                        # Split messages by the delimiter '\0' and process them
+                        messages = buffer.split("\0")
+                        buffer = messages.pop()  # Keep the last incomplete message in the buffer
+
+                        # Handle all complete messages
+                        for message in messages:
+                            if message.strip():  # Ignore empty messages
+                                clientlib.handle_message(ssock, message)
+                    
+                    except KeyboardInterrupt:
+
+                        print("Exiting game.")
+                        break
+                    except Exception as e:
+                        print(f"Error during communication: {e}")
+                        break
+
+            except ConnectionRefusedError:
+                print("Failed to connect to the server.")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+            finally: 
+                ssock.close() 
+                sock.close()
 
 if __name__ == "__main__":
     main()

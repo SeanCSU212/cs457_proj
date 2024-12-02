@@ -5,6 +5,7 @@ import argparse
 import json
 import serverlib
 import logging
+import ssl
 from game import *
 
 
@@ -84,6 +85,12 @@ def main():
     port = int(args.port)
 
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    #Encrypting connection and wrapping socket
+    sec_con = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    sec_con.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
+    server_sock = sec_con.wrap_socket(server_sock, server_side=True)
+    
     server_sock.bind((host, port))
     server_sock.listen()
     server_sock.setblocking(False)
