@@ -32,12 +32,12 @@ Tic-Tac-Toe-Two was developed to use a standard JSON message protocol for all co
 
 ## Security
 
-In terms of security, our game lacks in two main ways:
+In terms of security, we have accounted for encryption but not authentication:
 
 - Authentication - Users enter the game without using any sort of passphrase or key. This can lead to unwanted users joining the game. To address this, we could implement
-  a password or private key feature, giving authorized users the correct password or private key to join the game. We could also create a user registration system where users could sign up for an account and their account can be validated by the server.
+  a password, giving authorized users the correct password to join the game. We could also create a user registration system where users could sign up for an account and their account can be validated by the server.
 
-- Confidentiality - The methods mentioned above, although important, would be useless without implementing an encryption system to keep our data from being sent over the internet in plaintext. To address this we can implement public/private key encryption within our game to have our data stay safe in transmission.
+- Confidentiality - In our game we've implemented an encrypted connection using SSL encryption. We've created a private key and certificate for our server and included the files in our library. We made the certificate a value within the client so that they could verify the certificate. We then wrapped our the socket our server operates on with a secure socket to ensure an encrypted and confidential connection, we did the same with our client. This encrypts all users connections, protecting thier IP address from man-in-the-middle attacks.
 
 ## Technologies used
 
