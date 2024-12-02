@@ -29,7 +29,7 @@ def main():
     port = int(args.port)
     
     con_sec = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-    con_sec.load_verify_locations('cert.pem')
+    con_sec.load_verify_locations('./secure/cert.pem')
     
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         #Wrap socket
