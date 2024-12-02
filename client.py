@@ -2,13 +2,15 @@ import socket
 import argparse
 import json
 import clientlib
+import atexit
+import sys
 
 username = ""
+sock = None
 
 def send_message(sock, msg_type, msg_data):
     message = json.dumps({"type": msg_type, "data": msg_data})
     sock.sendall(message.encode()) 
-
 
 def main():
     global username
@@ -29,6 +31,7 @@ def main():
             sock.connect((host, port))
             print(f"Connected to server at {host}:{port}")
 
+            
             # Send the join message
             username = input("\nEnter Username: ")
             send_message(sock, "join", {"username": username})
@@ -57,6 +60,7 @@ def main():
                             clientlib.handle_message(sock, message)
                 
                 except KeyboardInterrupt:
+
                     print("Exiting game.")
                     break
                 except Exception as e:
@@ -67,6 +71,8 @@ def main():
             print("Failed to connect to the server.")
         except Exception as e:
             print(f"Unexpected error: {e}")
+        finally:  
+            sock.close()
 
 if __name__ == "__main__":
     main()

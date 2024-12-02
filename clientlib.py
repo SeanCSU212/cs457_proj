@@ -40,7 +40,7 @@ def handle_message(sock, data):
         # Handling for turn input
         elif msg_type == "your_turn":
             print("\nIt's your turn... ")
-            move = input("\nEnter move (1-16): ")
+            move = input("\nEnter move (1-16): ").strip()
             client.send_message(sock, "make_move", {"move": move})
         
         # Handlign for waiting for turn
@@ -67,6 +67,8 @@ def handle_message(sock, data):
         elif msg_type == "play_again":
             end_of_game(sock)
 
+        elif msg_type == "quit_broadcast":
+            print(f"{msg_data['player']} has quit the game... ")
         
             
 
