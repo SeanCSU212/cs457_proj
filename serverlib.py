@@ -107,9 +107,19 @@ def move_deserial(sock, data, msg_data):
         server.send_message(server.players[server.turn_index].sock, "invalid_move", {"move": ""})
         server.send_message(server.players[server.turn_index].sock, "your_turn", None)
         return
-
-    move = int(msg_data["move"])  # Integer of position input by active client
-
+    try:
+        if "move" not in msg_data:
+            raise ValueError("Missing 'move' key in the input data.")
+        
+        move = int(msg_data["move"])
+        
+       
+        if not (1 <= move <= 16):  
+            raise ValueError(f"'move' value {move} is out of range.") 
+    except ValueError as e:
+        print(f"Invalid input: {e}")
+        move = None    
+            
     if game.check_move_legality(move):  # Check legality of move
         game.make_move(move, ' X' if server.turn_index == 0 else ' O' if server.turn_index == 1 else ' +')
         logging.info(f"Player {server.players[server.turn_index].username} made a move at position {move}.")

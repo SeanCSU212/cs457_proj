@@ -68,11 +68,12 @@ def display_board_numbers():
     )
 
 def check_move_legality(input_num):
+    if input_num == None:
+        return False
     input_index = input_num - 1
     if 0 <= input_index < 16 and game_board[input_index] not in {' X', ' O', ' +'}:
         return True
     return False
-    
     
 def make_move(input_num, player):
         global game_board
