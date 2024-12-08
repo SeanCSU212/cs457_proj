@@ -63,3 +63,26 @@ In terms of security, we have accounted for encryption but not authentication:
 ## Known Bugs
 - When player quits, the player in the middle of the turn is not notified until after they submit their turn.
 - When player joins while game is running/full, the server throws error.
+
+## Future Roadmap
+
+While the project, at this stage, is complete within the scope of this class, multiple additional features could be added with further development.
+# Goals:
+*Implement a Multithreaded Chat System
+
+- Allow real-time communication between multiple users simultaneously.
+-Optimize threading to ensure seamless and lag-free performance under high user loads.
+-Incorporate message history storage and retrieval for ongoing sessions.
+
+*Develop a User-Friendly Non-Terminal UI
+
+-Build an intuitive graphical interface to enhance user experience.
+-Include interactive elements like buttons, menus, and chat notifications.
+-Make the UI responsive to support various screen sizes and devices.
+-Enhance Security
+
+*Implement end-to-end encryption for chat messages.
+
+-Add user authentication and session management to ensure secure access.
+-Include features to detect and mitigate spam or malicious activity.
+## Retrospective
