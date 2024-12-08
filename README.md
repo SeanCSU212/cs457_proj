@@ -71,16 +71,16 @@ While the project, at this stage, is complete within the scope of this class, mu
 **Implement a Multithreaded Chat System**
 
 - Allow real-time communication between multiple users simultaneously.
--Optimize threading to ensure seamless and lag-free performance under high user loads.
--Incorporate message history storage and retrieval for ongoing sessions.
+- Optimize threading to ensure seamless and lag-free performance under high user loads.
+- Incorporate message history storage and retrieval for ongoing sessions.
 
 **Develop a User-Friendly Non-Terminal UI**
 
--Build an intuitive graphical interface to enhance user experience.
--Include interactive elements like buttons, menus, and chat notifications.
--Make the UI responsive to support various screen sizes and devices.
+- Build an intuitive graphical interface to enhance user experience.
+- Include interactive elements like buttons, menus, and chat notifications.
+- Make the UI responsive to support various screen sizes and devices.
 
 **Enhance Security**
--Add user authentication and session management to ensure secure access.
--Include features to detect and mitigate spam or malicious activity.
+- Add user authentication and session management to ensure secure access.
+- Include features to detect and mitigate spam or malicious activity.
 ## Retrospective
