@@ -68,21 +68,19 @@ In terms of security, we have accounted for encryption but not authentication:
 
 While the project, at this stage, is complete within the scope of this class, multiple additional features could be added with further development.
 # Goals:
-*Implement a Multithreaded Chat System
+**Implement a Multithreaded Chat System**
 
 - Allow real-time communication between multiple users simultaneously.
 -Optimize threading to ensure seamless and lag-free performance under high user loads.
 -Incorporate message history storage and retrieval for ongoing sessions.
 
-*Develop a User-Friendly Non-Terminal UI
+**Develop a User-Friendly Non-Terminal UI**
 
 -Build an intuitive graphical interface to enhance user experience.
 -Include interactive elements like buttons, menus, and chat notifications.
 -Make the UI responsive to support various screen sizes and devices.
--Enhance Security
 
-*Implement end-to-end encryption for chat messages.
-
+**Enhance Security**
 -Add user authentication and session management to ensure secure access.
 -Include features to detect and mitigate spam or malicious activity.
 ## Retrospective
