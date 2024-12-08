@@ -67,7 +67,7 @@ In terms of security, we have accounted for encryption but not authentication:
 ## Future Roadmap
 
 While the project, at this stage, is complete within the scope of this class, multiple additional features could be added with further development.
-### Goals:
+### Future Additions:
 **Implement a Multithreaded Chat System**
 
 - Allow real-time communication between multiple users simultaneously.
