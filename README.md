@@ -39,7 +39,7 @@ Tic-Tac-Toe-Two was developed to use a standard JSON message protocol for all co
 - 'join' - Activated upon client connection, Follows up by prompting user for Username, and assigns a playing piece (X,O,+). Allows up to 3 player to activly play, and remaining clients to join as spectators. Sends broadcast that new player joined to server and all connected clients.
 - 'make_move' - Receives move position from client via "your_turn" message, handles all game logic following move including game state update, win conditions handling, and turn handling.
 
-*'Quit' from client now handled exclusively through client disconnection handling in server.*
+- 'Quit' from client now handled exclusively through client disconnection handling in server.*
 
 ## Security
 
