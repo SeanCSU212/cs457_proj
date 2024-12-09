@@ -83,4 +83,24 @@ While the project, at this stage, is complete within the scope of this class, mu
 **Enhance Security**
 - Add user authentication and session management to ensure secure access.
 - Include features to detect and mitigate spam or malicious activity.
+
 ## Retrospective
+**What Went Right**
+
+  - Making a server to client connection was fairly straighforward and we were prepared well for it.
+  - The underlying game class and structure was simple to program.
+  - Implementing our game class between our server and client went smoothly after we regressed our project due to overcomplication on the part of our team.
+  - Communication between our team was open and reliable for each member.
+  - Synchronization of game states across clients. It was difficult and took a lot of work but we were able to successfully synchronize client game states.
+
+**What Could Be Improved On**
+
+- What could be improved on
+  - Remember the basics. In our first iteration we over-complicated our project and made it too difficult on ourselves.
+  - We would focus on chat capabilities in the later stages of our development rather than earlier, this is the primary factor that overcomplicated our initial iteration.
+  - Familiarizing ourselves more with json serialization.
+  - Familiarize ourselves with threading.
+  - Time management improvements. For much of the team we struggled to get together and work in a group environment due to restrictive schedules.
+  - Organize as we go. Poor initial organization of our code with comments led to over-complex processes that made it hard to track function activity and dependencies.
+  - Smaller function sizes. In our initial iteration we had large functions that were over-reaching on their inteded purposes.
+  - Error handling. We did extensive error handling, but could not solve a crucial error involving a 4th client. Despite our successes we could improve here.
