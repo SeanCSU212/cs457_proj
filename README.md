@@ -95,7 +95,6 @@ While the project, at this stage, is complete within the scope of this class, mu
 
 **What Could Be Improved On**
 
-- What could be improved on
   - Remember the basics. In our first iteration we over-complicated our project and made it too difficult on ourselves.
   - We would focus on chat capabilities in the later stages of our development rather than earlier, this is the primary factor that overcomplicated our initial iteration.
   - Familiarizing ourselves more with json serialization.
